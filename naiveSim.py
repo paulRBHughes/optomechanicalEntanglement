@@ -18,7 +18,6 @@ tf = 10
 
 fig, ax = plt.subplots(2)
 t, state = utils.simulation(zeta, g0, n1b, n2b, ic, target, tf)
-print(np.size(t))
 corr = utils.correlation_var(state)
 ax[0].plot(t, corr, linewidth=2)
 ax[0].set_xlabel(r"$\tilde{t}$")

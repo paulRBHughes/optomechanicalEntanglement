@@ -9,12 +9,12 @@ Paul RB Hughes
 import numpy as np
 from numba import njit
 
-@njit
+#@njit
 def thermal_eom(zeta, mode_bath, other_bath, nth, u):
     # Function to calculate the time derivative of the (thermal) population nth
     # zeta is the ratio of gamma- to gamma+, other variables define the state
     # BECAUSE gamma- is not symmetric, when calculating n2 use -zeta!!!!!!!!!!!!!!!!
-    dn = (1+zeta) * np.cosh(u)**2 * (mode_bath - nth) + (1-zeta) * np.sinh(u)**2 * (other_bath + nth + 1)
+    dn = (1+zeta) * 0.5 * (1 + np.cosh(2*u)) * (mode_bath - nth) + (1-zeta) * 0.5 * (np.cosh(2*u) - 1) * (other_bath + nth + 1)
     return dn
 
 
@@ -36,7 +36,7 @@ def rel_eom(zeta, g, av_bath, diff_bath, state):
     av = state[0]
     diff = state[1]
     u = state[2]
-    dav = 0.5 * ((2*av_bath + 1)*np.cosh(2*u) + zeta*(diff - diff_bath) - 2*av - 1)
+    dav = 0.5 * ( ((2*av_bath + 1) + zeta*(diff - diff_bath))*np.cosh(2*u) - 2*av - 1)
     ddiff = diff_bath - diff - zeta*(2*av_bath + 1 - np.cosh(2*u) * (2*av + 1))
     du = 0.5 * (g - np.sinh(2*u)*(2*av_bath + 1 + zeta*(diff - diff_bath))/(2*av + 1))
     return np.array([dav, ddiff, du])
