@@ -8,17 +8,18 @@ plt.rcParams.update({
         "font.size": "14"
     })
 
-zeta = 0.3
-g0 = 0.75
-av_bath = 0.3
-# diff_bath = 0
-dbaths = [0, 0.1, 0.2, 0.3]
-target = 1e-8
-tf = 10
+# zeta = 0.3
+g0 = 5
+av_bath = 1
+diff_bath = 1
+# dbaths = [0, 0.1, 0.2, 0.3]
+zets = [-1, -0.5, 0, 0.5, 1]
+target = 1e-11
+tf = 1
 
 fig, ax = plt.subplots(2)
-for diff_bath in dbaths:
-    ic = np.array([av_bath, 0, 0])
+for zeta in zets:
+    ic = np.array([0, 0, 0])
     t, state = utils.rel_simulation(zeta, g0, av_bath, diff_bath, ic, target, tf)
     # print(np.size(t))
     corr = utils.rel_corr_var(state)
@@ -26,9 +27,9 @@ for diff_bath in dbaths:
     ax[0].set_xlabel(r"$\tilde{t}$")
     ax[0].set_ylabel("$\Delta_{12}^2$")
     ax[0].hlines(1, 0, tf, linewidth=1.5, linestyles=":")
-    ax[1].plot(t, state[1] - diff_bath, linewidth=2, label=diff_bath)
+    ax[1].plot(t, state[1] - diff_bath, linewidth=2, label=zeta)
     ax[1].set_xlabel(r"$\tilde{t}$")
     ax[1].set_ylabel(r"$\Delta n - \Delta n_b$")
-ax[1].legend()
+ax[1].legend(title="$\zeta$")
 plt.tight_layout()
 plt.show()
