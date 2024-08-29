@@ -9,10 +9,10 @@ plt.rcParams.update({
     })
 
 
-zeta = 0.8
-gamma = 2
+zeta = 0.6
+gamma = 5
 nb1 = 0.
-nb2 = 4
+nb2 = 1
 initial = np.array([nb1, nb2, 0])
 target = 1e-8
 tf = 5
@@ -43,5 +43,5 @@ ax[2].set_xlabel(r"$\tilde{t}$")
 ax[2].set_ylabel(r"$\theta$")
 
 plt.tight_layout()
-plt.savefig("mechanicalCooling.pdf", format='pdf', dpi=1200, bbox_inches='tight')
-# plt.show()
+# plt.savefig("mechanicalCooling.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.show()

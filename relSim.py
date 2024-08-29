@@ -9,17 +9,17 @@ plt.rcParams.update({
     })
 
 # zeta = 0.3
-g0 = 5
-av_bath = 1
+g0 = 0.2
+av_bath = 0.5
 diff_bath = 1
 # dbaths = [0, 0.1, 0.2, 0.3]
 zets = [-1, -0.5, 0, 0.5, 1]
 target = 1e-11
-tf = 1
+tf = 5
 
 fig, ax = plt.subplots(2)
 for zeta in zets:
-    ic = np.array([0, 0, 0])
+    ic = np.array([0.01, 0.01, 0])
     t, state = utils.rel_simulation(zeta, g0, av_bath, diff_bath, ic, target, tf)
     # print(np.size(t))
     corr = utils.rel_corr_var(state)

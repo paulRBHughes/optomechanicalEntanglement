@@ -27,7 +27,7 @@ def eom(zeta, gamma, nb1, nb2, state):
            (1 + zeta * np.cos(2 * theta)) * n1)
     dn2 = ((1 - zeta) * nb2 * np.square(np.cos(theta)) + (1 + zeta) * nb1 * np.square(np.sin(theta)) -
            (1 - zeta * np.cos(2 * theta)) * n2)
-    dtheta = -np.abs(gamma) + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
+    dtheta = -gamma * 0.5 + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
     return np.array([dn1, dn2, dtheta])
 
 
