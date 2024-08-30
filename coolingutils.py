@@ -42,8 +42,8 @@ def rk4slope(zeta, gamma, nb1, nb2, state, dt):
 def simulation(zeta, gamma, nb1, nb2, initial, target, tf):
     # target will be the target precision of a thermal population
     dt = 0.01  # arb
-    t = np.zeros(100000000)  # arb
-    state = np.zeros([3, 100000000])
+    t = np.zeros(1000000000)  # arb
+    state = np.zeros([3, 1000000000])
     state[:, 0] = initial[:]
     i = 0
     while t[i] < tf:  # standard dynamic timestep trick

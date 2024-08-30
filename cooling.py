@@ -26,7 +26,7 @@ otemp = hbaromegaonkopt / np.log(1 + 1/optot)
 
 # print(theta)
 
-steadycor = ax.contourf(G, Z, otemp, cmap='copper', origin="lower")
+steadycor = ax.contourf(G, Z, cooled, cmap='copper', origin="lower")
 ax.set_xlabel("$|g|$")
 ax.set_ylabel("$\zeta$")
 # ax.set_title("Steady-State")
@@ -34,6 +34,6 @@ plt.tight_layout()
 
 fig.colorbar(steadycor, ax=ax, label=r"$T_c$")
 
-# plt.show()
-plt.savefig("heatmapopt.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.show()
+# plt.savefig("heatmapopt.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

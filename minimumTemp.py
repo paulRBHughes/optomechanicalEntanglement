@@ -27,7 +27,7 @@ minn = np.zeros([np.size(gammas), np.size(zetas)])
 def sims(zeta, gamma, nbc, nbm, initial, target, tf):
     t, state = coolingutils.simulation(zeta, gamma, nbc, nbm, initial, target, tf)
     pop = state[1, 1:] * np.square(np.cos(state[2, 1:])) + state[0, 1:] * np.square(np.sin(state[2, 1:]))
-    return np.array([np.min(pop), t[np.argmin(pop)+1]])
+    return np.min(pop), t[np.argmin(pop)+1]
 
 
 
@@ -40,10 +40,35 @@ for j, zeta in enumerate(zetas):
 
     with Pool(processes=15) as pool:
         a = pool.map(wrapper, gammas)
-        minn[:, j] = a[0]
-        tmin[:, j] = a[1]
+        # print(np.transpose(a)[0,:])
+        minn[:, j] = np.transpose(a)[0, :]
+        tmin[:, j] = np.transpose(a)[1, :]
+
+minn = np.transpose(minn)
+tmin = np.transpose(tmin)
 
 np.savetxt("minpop", minn)
 np.savetxt("tmin", tmin)
 
-
+# G, Z = np.meshgrid(gammas, zetas)
+# fig, ax = plt.subplots()
+# minT = ax.contourf(G, Z, minn, cmap='copper', origin="lower")
+# ax.set_xlabel("$|g|$")
+# ax.set_ylabel("$\zeta$")
+# # ax.set_title("Steady-State")
+# plt.tight_layout()
+#
+# fig.colorbar(minT, ax=ax, label=r"$T_c$")
+#
+# plt.show()
+#
+#
+# fig2, ax2 = plt.subplots()
+#
+# time = ax2.contourf(G, Z, tmin, cmap='copper', origin="lower")
+# # ax.set_title("Steady-State")
+# plt.tight_layout()
+#
+# fig.colorbar(time, ax=ax2, label=r"$t_{min}$")
+#
+# plt.show()
