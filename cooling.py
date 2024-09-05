@@ -8,7 +8,7 @@ plt.rcParams.update({
     })
 
 gammas = np.arange(0, 5, 0.01)
-zetas = np.arange(0, 0.99, 0.004)
+zetas = np.arange(0.8, 0.99, 0.004)
 nbc = 0
 nbm = 800000
 hbaromegaonk = 0.0000959847469  # 2MHz
@@ -26,7 +26,7 @@ otemp = hbaromegaonkopt / np.log(1 + 1/optot)
 
 # print(theta)
 
-steadycor = ax.contourf(G, Z, cooled, cmap='copper', origin="lower")
+steadycor = ax.contourf(G, Z, (otemp), cmap='copper', origin="lower")
 ax.set_xlabel("$|g|$")
 ax.set_ylabel("$\zeta$")
 # ax.set_title("Steady-State")
