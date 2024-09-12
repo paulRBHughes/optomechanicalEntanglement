@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import coolingutils
 import utils
+from multiprocessing import Pool
+
 
 """
 scheme.py
@@ -17,8 +19,9 @@ plt.rcParams.update({
         "font.size": "14"
     })
 
-# gammas = np.array([0.5, 1, 2])
-zetas = np.arange(0.92, 0.9999, 0.0001)
+gees = np.array([0.5, 2, 5])
+tfs = [12, 3, 2]
+zetas = np.arange(0.98, 0.9999, 0.0001)
 nbc = 0
 nbm = 75
 scale = 1/(nbm + 1)
@@ -30,8 +33,8 @@ tf = 0.08
 
 # Large pumping limit, subcritical squeeze
 # to help sim along, we use the unthermalized equations and approximate (pretty well tbh).
-gees = [1, 4, 10]
-tfs = [5, 3, 1]
+# gees = np.arange(1, 5, 0.1)
+# tfs = 7.5 * np.reciprocal(gees)
 
 
 def largecooled(i):
@@ -55,6 +58,13 @@ def largecooled(i):
     return mincorr, enttime
 
 fig, ax = plt.subplots()
+# with Pool(processes=15) as pool:
+#     pooled = pool.map(largecooled, range(np.size(gees)))
+#
+# for g in gees:
+#     np.savetxt(f"timefiles/pooledResults{g}", pooled[g, :])
+
+
 for i, g in enumerate(gees):
     mc, et = largecooled(i)
     np.savetxt(f"Tcorr{g}", et)

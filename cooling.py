@@ -7,12 +7,14 @@ plt.rcParams.update({
         "font.size": "14"
     })
 
-gammas = np.arange(0, 5, 0.01)
-zetas = np.arange(0.8, 0.99, 0.004)
+gammas = np.arange(0, 3.01, 0.01)
+k = np.arange(0, 6, 0.2)
+zetas = 1 - 1/(10**k)
 nbc = 0
 nbm = 800000
 hbaromegaonk = 0.0000959847469  # 2MHz
 hbaromegaonkopt = 0.2663576  # 1THz
+G, K = np.meshgrid(gammas, k)
 G, Z = np.meshgrid(gammas, zetas)
 
 fig, ax = plt.subplots()
@@ -26,14 +28,14 @@ otemp = hbaromegaonkopt / np.log(1 + 1/optot)
 
 # print(theta)
 
-steadycor = ax.contourf(G, Z, (otemp), cmap='copper', origin="lower")
+steadycor = ax.contourf(G, K, np.log10(temp), cmap='copper', origin="lower")
 ax.set_xlabel("$|g|$")
-ax.set_ylabel("$\zeta$")
+ax.set_ylabel("$\log_{10}(1 - \zeta)$")
 # ax.set_title("Steady-State")
 plt.tight_layout()
 
-fig.colorbar(steadycor, ax=ax, label=r"$T_c$")
+fig.colorbar(steadycor, ax=ax, label=r"$\log_{10}(T_m)$")
 
-plt.show()
-# plt.savefig("heatmapopt.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+# plt.show()
+plt.savefig("heatmap.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

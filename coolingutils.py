@@ -74,6 +74,72 @@ def simulation(zeta, gamma, nb1, nb2, initial, target, tf):
     return t, state
 
 
+def detuned_eom(zeta, gamma, nb1, nb2, detune, state, t):
+    # this function does the same as above but with the possibility of a laser detuning from resonance
+    # so state must be a 4 parameter vector
+    epsilon = 1e-21  # this is for preventing divergence
+    n1 = state[0]
+    n2 = state[1]
+    theta = state[2]
+    sigma = state[3]
+    deltan = n2 - n1
+    deltanb = nb2 - nb1
+    twonth = n1 + n2
+    twonb = nb1 + nb2
+    dn1 = ((1 + zeta) * nb1 * np.square(np.cos(theta)) + (1 - zeta) * nb2 * np.square(np.sin(theta)) -
+           (1 + zeta * np.cos(2 * theta)) * n1)
+    dn2 = ((1 - zeta) * nb2 * np.square(np.cos(theta)) + (1 + zeta) * nb1 * np.square(np.sin(theta)) -
+           (1 - zeta * np.cos(2 * theta)) * n2)
+    dtheta = -gamma * 0.5 * np.cos(sigma - detune * t) + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
+    dsigma = 0
+    if np.sin(sigma - detune * t) > epsilon:
+        dsigma = -0.5 * gamma * np.sin(sigma - detune * t)/(np.tan(2 * theta))
+    return np.array([dn1, dn2, dtheta, dsigma])
+
+
+def detuned_rk4slope(zeta, gamma, nb1, nb2, detuning, state, t, dt):
+    k1 = detuned_eom(zeta, gamma, nb1, nb2, detuning, state, t)
+    k2 = detuned_eom(zeta, gamma, nb1, nb2, detuning, state + 0.5 * k1 * dt, t + 0.5 * dt)
+    k3 = detuned_eom(zeta, gamma, nb1, nb2, detuning, state + 0.5 * k2 * dt, t + 0.5 * dt)
+    k4 = detuned_eom(zeta, gamma, nb1, nb2, detuning, state + k3 * dt, t + dt)
+    return k1/6 + k2/3 + k3/3 + k4/6
+
+
+def detuned_simulation(zeta, gamma, nb1, nb2, detuning, initial, target, tf):
+    # target will be the target precision of a thermal population
+    dt = 0.01  # arb
+    t = np.zeros(1000000000)  # arb
+    state = np.zeros([4, 1000000000])
+    state[:, 0] = initial[:]
+    i = 0
+    while t[i] < tf:  # standard dynamic timestep trick
+        test = 30 * dt * target
+        # two steps of dt
+        k = detuned_rk4slope(zeta, gamma, nb1, nb2, detuning, state[:, i], t[i], dt)
+        check1a = state[:, i] + k * dt
+        k = detuned_rk4slope(zeta, gamma, nb1, nb2, detuning, check1a, t[i] + dt, dt)
+        check1 = check1a + k * dt
+        # one step of 2dt
+        k = detuned_rk4slope(zeta, gamma, nb1, nb2, detuning, state[:, i], t[i], 2*dt)
+        check2 = state[:, i] + 2 * k * dt
+        # checking error estimate
+        check = np.max(np.absolute(check1[:2] - check2[:2]))  # only care about populations
+        if check < 0.5 * test:
+            rho = 2
+        else:
+            rho = test/check  # taking faith in old code
+        if rho > 1:
+            t[i + 1] = t[i] + dt
+            state[:, i + 1] = check1a
+            # state[2:, i + 1] = state[2:, i + 1] % 2*np.pi - np.pi
+            i += 1
+        dt = dt * rho**0.25
+
+    t = t[:i-1]
+    state = state[:, :i - 1]
+    return t, state
+
+
 @njit
 def bath(omega, T):
     C = 75.3862e-12
