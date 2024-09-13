@@ -9,7 +9,7 @@ plt.rcParams.update({
     })
 
 
-zeta = 0.99
+zeta = 0.8
 gamma = 3
 nb1 = 0
 nb2 = 5
@@ -37,7 +37,7 @@ for detuning in detunings:
     # ax[2].set_xlabel(r"$\tilde{t}$")
     # ax[2].set_ylabel(r"$n_{c}$")
 
-    ax[1].loglog(t, state[1]*np.square(np.cos(state[2])) + state[0]*np.square(np.sin(state[2])), linewidth=2)
+    ax[1].plot(t, state[1]*np.square(np.cos(state[2])) + state[0]*np.square(np.sin(state[2])), linewidth=2)
     ax[1].set_xlabel(r"$\tilde{t}$")
     ax[1].set_ylabel(r"$n_m$")
 
