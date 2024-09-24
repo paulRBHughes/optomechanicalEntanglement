@@ -16,7 +16,7 @@ diff_bath = 2 * av_bath
 # dbaths = [0, 0.1, 0.2, 0.3]
 zets = [0.99, 0.9999]
 target = 1e-11
-tfs = [10, 3]
+tfs = [10, 2.5]
 
 fig, ax = plt.subplots()
 # fullfig, fax = plt.subplots(3)
@@ -29,7 +29,7 @@ for zeta in zets:
         mindex = np.argmin(corr)
         off_state = state[:, mindex]
         t1 = t[mindex]
-        t2, state2 = utils.rel_simulation(zeta, 0, av_bath, diff_bath, off_state, target, 1000 - t1)
+        t2, state2 = utils.rel_simulation(zeta, 2*g0, av_bath, diff_bath, off_state, target, tfs[i] - t1)
         corr2 = utils.rel_corr_var(state2)
         t0 = t[:mindex]
         t2_scale = t1*np.ones(np.size(t2)) + t2

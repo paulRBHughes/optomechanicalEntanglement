@@ -8,6 +8,7 @@ Paul RB Hughes
 # Import
 import numpy as np
 from numba import njit
+from functools import partial
 
 #@njit
 def thermal_eom(zeta, mode_bath, other_bath, nth, u):
@@ -48,6 +49,49 @@ def rk4slope(zeta, g, batha, bathb, state, dt):
     k3 = eom(zeta, g, batha, bathb, state + 0.5 * k2 * dt)
     k4 = eom(zeta, g, batha, bathb, state + k3 * dt)
     return k1/6 + k2/3 + k3/3 + k4/6
+
+
+def pump_rk4slope(zeta, g, avb, db, state, t, dt):
+    k1 = rel_eom(zeta, g(t), avb, db, state)
+    k2 = rel_eom(zeta, g(t + 0.5 * dt), avb, db, state + 0.5 * k1 * dt)
+    k3 = rel_eom(zeta, g(t + 0.5 * dt), avb, db, state + 0.5 * k2 * dt)
+    k4 = rel_eom(zeta, g(t + dt), avb, db, state + k3 * dt)
+    return k1/6 + k2/3 + k3/3 + k4/6
+
+
+def pump_simulation(zeta, g_func, avb, db, initial, target, tf, *args):
+    # same as above w
+    g = partial(g_func, *args)
+    dt = 0.01  # arb
+    t = np.zeros(100000000)  # arb
+    state = np.zeros([3, 100000000])
+    state[:, 0] = initial[:]
+    i = 0
+    while t[i] < tf:  # standard dynamic timestep trick
+        test = 30 * dt * target
+        # two steps of dt
+        k = pump_rk4slope(zeta, g, avb, db, state[:, i], t[i], dt)
+        check1a = state[:, i] + k * dt
+        k = pump_rk4slope(zeta, g, avb, db, check1a, t[i] + dt, dt)
+        check1 = check1a + k * dt
+        # one step of 2dt
+        k = pump_rk4slope(zeta, g, avb, db, state[:, i], t[i], 2*dt)
+        check2 = state[:, i] + 2 * k * dt
+        # checking error estimate
+        check = np.max(np.absolute(check1[:2] - check2[:2]))  # only care about populations
+        if check < 0.5 * test:
+            rho = 2
+        else:
+            rho = test/check  # taking faith in old code
+        if rho > 1:
+            t[i + 1] = t[i] + dt
+            state[:, i + 1] = check1a
+            i += 1
+        dt = dt * rho**0.25
+
+    t = t[:i-1]
+    state = state[:, :i - 1]
+    return t, state
 
 
 def simulation(zeta, g, bath1, bath2, initial, target, tf):
