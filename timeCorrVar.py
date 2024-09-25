@@ -20,10 +20,10 @@ Paul RB Hughes
 # nbc = 0
 nbm = 75
 scale = 1/(nbm + 1)
-target = 1e-13
+target = 1e-12
 # tf = 0.08
-gees = np.logspace(0, 2.5, 5)
-tfs = np.reciprocal(gees) * 5
+gees = np.logspace(-1.5, 1.8, 100)
+tfs = np.flip(np.logspace(-.8, 2, 100))
 
 
 def timeunder(z, corrlevel, optimal=True):
@@ -45,8 +45,9 @@ def timeunder(z, corrlevel, optimal=True):
         return gopt
     return tau
 
+
 cl = 2e-1  # I want to see how long the pump can keep the correlation variance under this value for
-zetas = [0.99999999]
+zetas = [1]
 fig, ax = plt.subplots()
 styts = ["-", '--', '-.', ':']
 for i, zeta in enumerate(zetas):
