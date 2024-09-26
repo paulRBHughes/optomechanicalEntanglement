@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import lineStyles
+
 import coolingutils
 import utils
 from multiprocessing import Pool
@@ -22,12 +24,12 @@ nbm = 75
 scale = 1/(nbm + 1)
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 1000)
-tfs = np.flip(np.logspace(-.8, 2, 1000))
+gees = np.logspace(-1.5, 1.8, 50)
+tfs = np.flip(np.logspace(-.8, 2, 50))
 colors = ['lightskyblue', 'dodgerblue', 'navy']
 
 
-def timeunder(z, corrlevel):
+def optimal(z, corrlevel):
     # feed cls largest to smallest
     # feed gees small to large
     gopt = np.zeros(np.size(corrlevel))
@@ -48,7 +50,7 @@ def timeunder(z, corrlevel):
                 continue  # we know it will not be the optimal
             taumax[j] = tau
             gopt[j] = g  # otherwise, we have a new optimal pump and need to see its tau for longer cls
-        # print(f'g={g} done')
+        print(f'g={g} done')
 
     return gopt
 
@@ -58,7 +60,9 @@ levels = np.flip(np.logspace(-1, 0, 35))
 zetas = [0.99, 0.999, 1]
 for i, zeta in enumerate(zetas):
     gopt = timeunder(zeta, levels)
-    ax.loglog(levels, gopt, linewidth=2, label=zeta, color=colors[i])
+    ax.loglog(levels, gopt, linewidth=2, label=zeta, color=colors[i], linestyle='-')
+    gmin = (1 + (1 - zeta)*nbm)*np.reciprocal(levels) - 1
+    ax.loglog(levels, gmin, linewidth=2, color=colors[i], linestyle='--')
 # np.savetxt(f"optPumps{zeta}", opts)
 
 ax.set_xlabel(r"$(\Delta_{12})_{target}^2$")
