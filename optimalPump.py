@@ -34,12 +34,12 @@ def timeunder(z, corrlevel):
     taumax = np.zeros(np.size(corrlevel))
     for i, g in enumerate(gees):  # for every g level we want to investigate
         tf = tfs[i]  # there is a tf we have previously determined that captures the end of entanglement and not much longer
-        ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # we set the IC according to the tilde equns
+        ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # we set the IC according to the tilde eqns
         t, state = utils.rel_simulation(z, g, 0, 0, ic, target, tf)  # and simulate the squeeze
         corr = utils.rel_corr_var(state)  # get the correlation variance
         mc = np.min(corr)  # find its minimum
         # now I want to find time it is entangled below the targets i've set
-        for j, cl in corrlevel:  # so for each target level
+        for j, cl in enumerate(corrlevel):  # so for each target level
             if mc > (scale * cl):  # if the minimum correlation doesn't break the target
                 break  # end the loop and use a stronger g
             entangledindex = np.nonzero(corr < scale * cl)  # if it does then find the indexes where the correlation does
@@ -48,28 +48,22 @@ def timeunder(z, corrlevel):
                 continue  # we know it will not be the optimal
             taumax[j] = tau
             gopt[j] = g  # otherwise, we have a new optimal pump and need to see its tau for longer cls
+        # print(f'g={g} done')
 
     return gopt
 
 
 fig, ax = plt.subplots()
-levels = np.logspace(-1, 0, 35)
+levels = np.flip(np.logspace(-1, 0, 35))
 zetas = [0.99, 0.999, 1]
 for i, zeta in enumerate(zetas):
-
-
-    def wrapper(cl):
-        return timeunder(zeta, cl)
-
-
-    with Pool(processes=22) as pool:
-        opts = pool.map(wrapper, levels)
-    ax.loglog(levels, opts, linewidth=2, label=zeta, color=colors[i])
+    gopt = timeunder(zeta, levels)
+    ax.loglog(levels, gopt, linewidth=2, label=zeta, color=colors[i])
 # np.savetxt(f"optPumps{zeta}", opts)
 
 ax.set_xlabel(r"$(\Delta_{12})_{target}^2$")
 ax.set_ylabel(r"$g_{opt}$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
-# plt.show()
-plt.savefig(f"optPumpMulti1.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.show()
+# plt.savefig(f"optPumpMulti1.pdf", format='pdf', dpi=1200, bbox_inches='tight')

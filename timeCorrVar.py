@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import coolingutils
 import utils
+import matplotlib.lines as mlines
 from multiprocessing import Pool
 
 plt.rcParams.update({
@@ -22,8 +23,8 @@ nbm = 75
 scale = 1/(nbm + 1)
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 100)
-tfs = np.flip(np.logspace(-.8, 2, 100))
+gees = np.logspace(-1.5, 1.8, 1000)
+tfs = np.flip(np.logspace(-.8, 2, 1000))
 
 
 def timeunder(z, corrlevel, optimal=True):
@@ -46,16 +47,28 @@ def timeunder(z, corrlevel, optimal=True):
     return tau
 
 
-cl = 2e-1  # I want to see how long the pump can keep the correlation variance under this value for
-zetas = [1]
+cls = [0.8]  # I want to see how long the pump can keep the correlation variance under this value for
+zetas = [1, 0.999, 0.99]
 fig, ax = plt.subplots()
 styts = ["-", '--', '-.', ':']
-for i, zeta in enumerate(zetas):
-    ax.semilogx(gees, timeunder(zeta, cl, False), label=zeta, linewidth=2, linestyle=styts[i])
+colors = ['navy', 'dodgerblue', 'lightskyblue']
+for j, cl in enumerate(cls):
+    for i, zeta in enumerate(zetas):
+        ax.semilogx(gees, timeunder(zeta, cl, False), linewidth=2, label=zeta, linestyle=styts[i], color=colors[j])
 
 ax.set_xlabel(r"$g$")
-ax.set_ylabel(rf"$\tau({cl})$")
+ax.set_ylabel(r"$\tau(0.8)$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
-plt.show()
-# plt.savefig(f"timeunder{cl}.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+ax.set_xlim([0.2, ax.get_xlim()[1]])
+# solid = mlines.Line2D([], [], color=colors[0], linestyle=styts[0], label=zetas[0])
+# dashed = mlines.Line2D([], [], color=colors[0], linestyle=styts[1], label=zetas[1])
+# dashdot = mlines.Line2D([], [], color=colors[2], linestyle=styts[2], label=zetas[2])
+# first_legend = ax.legend(handles=[solid, dashed], title="$\zeta$")
+# ax.add_artist(first_legend)
+# lsb = mlines.Line2D([], [], color=colors[0], linestyle=styts[0], label=cls[0])
+# db = mlines.Line2D([], [], color=colors[1], linestyle=styts[0], label=cls[1])
+# navy = mlines.Line2D([], [], color=colors[2], linestyle=styts[0], label=cls[2])
+# ax.legend(handles=[lsb, db, navy], title="$(\Delta_{12}^2)_{target}$", loc='lower left')
+# plt.show()
+plt.savefig(f"timeunder0.8.pdf", format='pdf', dpi=1200, bbox_inches='tight')
