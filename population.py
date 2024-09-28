@@ -1,0 +1,48 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.rcParams.update({
+        "text.usetex": True,
+        "font.family": "Computer Modern Roman",
+        "font.size": "14"
+    })
+
+gammas = np.arange(0.001, 10.001, 0.001)
+cav_pops = 497.83972 * np.square(gammas)
+# k = np.arange(0, 6, 0.2)
+# zetas = 1 - 1/(10**k)
+nbc = 0
+nbm = 40
+# hbaromegaonk = 0.0000959847469  # 2MHz
+# hbaromegaonkopt = 0.2663576  # 1THz
+# G, K = np.meshgrid(gammas, k)
+# G, Z = np.meshgrid(gammas, zetas)
+Zs = [0.99968]
+styles = [":", "-.", '--', '-']
+detuning_factor = 10
+
+fig, ax = plt.subplots()
+theta = 0.5 * np.arctan(-2 * gammas)
+for i, Z in enumerate(Zs):
+    cooled = ((1 - Z) * nbm * np.square(np.cos(theta)) + (1 + Z) * nbc * np.square(np.sin(theta)))/(1 - Z * np.cos(2 * theta))
+    opt = ((1 + Z) * nbc * np.square(np.cos(theta)) + (1 - Z) * nbm * np.square(np.sin(theta)))/(1 + Z * np.cos(2 * theta))
+    cooltot = cooled * np.square(np.cos(theta)) + opt * np.square(np.sin(theta))
+    optot = cooled * np.square(np.sin(theta)) + opt * np.square(np.cos(theta))
+    ax.loglog(cav_pops, cooltot * detuning_factor, linestyle=styles[i], color='r', label=Z)
+    ax.loglog(cav_pops, optot / detuning_factor, linestyle=styles[i], color='b')
+# temp = hbaromegaonk / np.log(1 + 1/cooltot)
+# otemp = hbaromegaonkopt / np.log(1 + 1/optot)
+
+# print(theta)
+
+
+ax.set_xlabel(r"$\bar{n}_c$")
+ax.set_ylabel("$n^{ss}$")
+# ax.set_xlim(1, 2e5)
+ax.legend(title="$\zeta$")
+# ax.set_title("Steady-State")
+plt.tight_layout()
+
+plt.show()
+# plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+
