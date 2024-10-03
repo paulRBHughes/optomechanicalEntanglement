@@ -27,7 +27,7 @@ def eom(zeta, gamma, nb1, nb2, state):
            (1 + zeta * np.cos(2 * theta)) * n1)
     dn2 = ((1 - zeta) * nb2 * np.square(np.cos(theta)) + (1 + zeta) * nb1 * np.square(np.sin(theta)) -
            (1 - zeta * np.cos(2 * theta)) * n2)
-    dtheta = -gamma * 0.5 + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
+    dtheta = gamma * 0.5 + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
     return np.array([dn1, dn2, dtheta])
 
 
@@ -90,10 +90,10 @@ def detuned_eom(zeta, gamma, nb1, nb2, detune, state, t):
            (1 + zeta * np.cos(2 * theta)) * n1)
     dn2 = ((1 - zeta) * nb2 * np.square(np.cos(theta)) + (1 + zeta) * nb1 * np.square(np.sin(theta)) -
            (1 - zeta * np.cos(2 * theta)) * n2)
-    dtheta = -gamma * 0.5 * np.cos(sigma - detune * t) + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
+    dtheta = gamma * 0.5 * np.cos(sigma - detune * t) + (zeta * (twonb - twonth) - deltanb) * np.sin(2 * theta)/deltan
     dsigma = 0
     if np.sin(sigma - detune * t) > epsilon:
-        dsigma = -0.5 * gamma * np.sin(sigma - detune * t)/(np.tan(2 * theta))
+        dsigma = 0.5 * gamma * np.sin(sigma - detune * t)/(np.tan(2 * theta))
     return np.array([dn1, dn2, dtheta, dsigma])
 
 

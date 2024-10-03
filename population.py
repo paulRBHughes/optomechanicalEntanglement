@@ -17,8 +17,11 @@ nbm = 40
 # hbaromegaonkopt = 0.2663576  # 1THz
 # G, K = np.meshgrid(gammas, k)
 # G, Z = np.meshgrid(gammas, zetas)
-Zs = [0.99968]
+Zs = [0.9, 0.99, 0.999, 0.9999]
 styles = [":", "-.", '--', '-']
+reds = ['lightcoral', 'firebrick', 'darkred', 'red']
+blues = ['lightskyblue', 'dodgerblue', 'navy', 'blue']
+
 detuning_factor = 10
 
 fig, ax = plt.subplots()
@@ -28,8 +31,8 @@ for i, Z in enumerate(Zs):
     opt = ((1 + Z) * nbc * np.square(np.cos(theta)) + (1 - Z) * nbm * np.square(np.sin(theta)))/(1 + Z * np.cos(2 * theta))
     cooltot = cooled * np.square(np.cos(theta)) + opt * np.square(np.sin(theta))
     optot = cooled * np.square(np.sin(theta)) + opt * np.square(np.cos(theta))
-    ax.loglog(cav_pops, cooltot * detuning_factor, linestyle=styles[i], color='r', label=Z)
-    ax.loglog(cav_pops, optot / detuning_factor, linestyle=styles[i], color='b')
+    ax.loglog(gammas, cooltot, linestyle=styles[i], color=reds[i], label=Z)
+    ax.loglog(gammas, optot, linestyle=styles[i], color=blues[i])
 # temp = hbaromegaonk / np.log(1 + 1/cooltot)
 # otemp = hbaromegaonkopt / np.log(1 + 1/optot)
 
@@ -39,10 +42,10 @@ for i, Z in enumerate(Zs):
 ax.set_xlabel(r"$\bar{n}_c$")
 ax.set_ylabel("$n^{ss}$")
 # ax.set_xlim(1, 2e5)
-ax.legend(title="$\zeta$")
+ax.legend(title="$\zeta$", loc='center left')
 # ax.set_title("Steady-State")
 plt.tight_layout()
 
-plt.show()
-# plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+# plt.show()
+plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 
