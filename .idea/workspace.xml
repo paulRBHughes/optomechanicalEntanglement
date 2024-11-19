@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a58ddf6-1402-4390-9070-4d22204ffcd1" name="Changes" comment="includes the missed sin term in theta" />
+    <list default="true" id="3a58ddf6-1402-4390-9070-4d22204ffcd1" name="Changes" comment="plot changes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/cooling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coolingutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/coolingutils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/optimalPump.py" beforeDir="false" afterPath="$PROJECT_DIR$/optimalPump.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/population.py" beforeDir="false" afterPath="$PROJECT_DIR$/population.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scheme.py" beforeDir="false" afterPath="$PROJECT_DIR$/scheme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transient.py" beforeDir="false" afterPath="$PROJECT_DIR$/transient.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +28,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -26,12 +41,12 @@
     &quot;assignee&quot;: &quot;paulRBHughes&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/paulRBHughes/2modeSqueeze.git",
-    "accountId": "c2d535ce-7bdf-4d75-aeaf-494771784572"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/paulRBHughes/2modeSqueeze.git&quot;,
+    &quot;accountId&quot;: &quot;c2d535ce-7bdf-4d75-aeaf-494771784572&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -43,13 +58,22 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.cooling.executor&quot;: &quot;Run&quot;,
+    &quot;Python.coolingutils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.detunedCooling.executor&quot;: &quot;Run&quot;,
     &quot;Python.naiveSim.executor&quot;: &quot;Run&quot;,
+    &quot;Python.optimalPump.executor&quot;: &quot;Run&quot;,
+    &quot;Python.population.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pumpComp.executor&quot;: &quot;Run&quot;,
     &quot;Python.relSim.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scheme.executor&quot;: &quot;Run&quot;,
     &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.timeCorrVar.executor&quot;: &quot;Run&quot;,
+    &quot;Python.transient.executor&quot;: &quot;Run&quot;,
     &quot;Python.utils.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/paul/PycharmProjects/2modeSqueeze&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/Paul/Documents/Research/Code/2modeSqueeze&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -58,10 +82,15 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-ce3d9afa04ac-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.20224.347" />
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -104,7 +133,63 @@
       <option name="project" value="LOCAL" />
       <updated>1724272810807</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="All of the cool-entangle scheme">
+      <option name="closed" value="true" />
+      <created>1725495043837</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725495043837</updated>
+    </task>
+    <task id="LOCAL-00005" summary="much ado about detuning">
+      <option name="closed" value="true" />
+      <created>1726159223662</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726159223662</updated>
+    </task>
+    <task id="LOCAL-00006" summary="quick commit to save something">
+      <option name="closed" value="true" />
+      <created>1726260285409</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726260285409</updated>
+    </task>
+    <task id="LOCAL-00007" summary="plenty to do with the correlation variance">
+      <option name="closed" value="true" />
+      <created>1727202622692</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1727202622692</updated>
+    </task>
+    <task id="LOCAL-00008" summary="quick commit">
+      <option name="closed" value="true" />
+      <created>1727384660849</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1727384660849</updated>
+    </task>
+    <task id="LOCAL-00009" summary="some files I had not added before">
+      <option name="closed" value="true" />
+      <created>1727552685046</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1727552685046</updated>
+    </task>
+    <task id="LOCAL-00010" summary="plot changes">
+      <option name="closed" value="true" />
+      <created>1727967065070</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1727967065070</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,7 +210,14 @@
     <MESSAGE value="intial commit" />
     <MESSAGE value="fixed the discrepancy" />
     <MESSAGE value="includes the missed sin term in theta" />
-    <option name="LAST_COMMIT_MESSAGE" value="includes the missed sin term in theta" />
+    <MESSAGE value="All of the cool-entangle scheme" />
+    <MESSAGE value="much ado about detuning" />
+    <MESSAGE value="quick commit to save something" />
+    <MESSAGE value="plenty to do with the correlation variance" />
+    <MESSAGE value="quick commit" />
+    <MESSAGE value="some files I had not added before" />
+    <MESSAGE value="plot changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="plot changes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/2modeSqueeze$utils.coverage" NAME="utils Coverage Results" MODIFIED="1719758652613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

@@ -19,15 +19,20 @@ def thermal_eom(zeta, mode_bath, other_bath, nth, u):
     return dn
 
 
-def eom(zeta, g, batha, bathb, state):
+def eom(zeta, g, B, batha, bathb, state):
     # caluculate the time derivative of the squeeze parameter amplitude
     # a must correspond to the mode that has positive gamma-, i.e. n1 unless I change something
+    omegasq = 1/(16*np.square(B) + 1)
+    q = omegasq * np.square(g)/(1 + zeta)
+    p = np.square(g) * np.square(B)/(2 * (1 + zeta)*(np.square(B) + 16))
+    r = np.square(g)/(2 * (1 + zeta))
+    w = np.square(g) / (1 + zeta) * (np.square(B) + 8)/(np.square(B) + 16)
     na = state[0]
     nb = state[1]
     u = state[2]
-    dn1 = thermal_eom(zeta, batha, bathb, na, u)
-    dn2 = thermal_eom(-zeta, bathb, batha, nb, u)
-    du = 0.5*(g - np.sinh(2*u) * (batha + bathb + 1 + zeta*(batha - na + nb - bathb))/(na + nb + 1))
+    dn1 = thermal_eom(zeta, batha, bathb, na, u) + (q * na + p)* np.square(np.sinh(u))
+    dn2 = thermal_eom(-zeta, bathb, batha, nb, u) + (-q * na + r)* np.square(np.cosh(u))
+    du = 0.5*(g - np.sinh(2*u) * (batha + bathb + 1 + zeta*(batha - na + nb - bathb) + w + q * (nb - na))/(na + nb + 1))
     return np.array([dn1, dn2, du])
 
 
@@ -43,11 +48,11 @@ def rel_eom(zeta, g, av_bath, diff_bath, state):
     return np.array([dav, ddiff, du])
 
 
-def rk4slope(zeta, g, batha, bathb, state, dt):
-    k1 = eom(zeta, g, batha, bathb, state)
-    k2 = eom(zeta, g, batha, bathb, state + 0.5 * k1 * dt)
-    k3 = eom(zeta, g, batha, bathb, state + 0.5 * k2 * dt)
-    k4 = eom(zeta, g, batha, bathb, state + k3 * dt)
+def rk4slope(zeta, g, B, batha, bathb, state, dt):
+    k1 = eom(zeta, g, B, batha, bathb, state)
+    k2 = eom(zeta, g, B, batha, bathb, state + 0.5 * k1 * dt)
+    k3 = eom(zeta, g, B, batha, bathb, state + 0.5 * k2 * dt)
+    k4 = eom(zeta, g, B, batha, bathb, state + k3 * dt)
     return k1/6 + k2/3 + k3/3 + k4/6
 
 
@@ -94,22 +99,22 @@ def pump_simulation(zeta, g_func, avb, db, initial, target, tf, *args):
     return t, state
 
 
-def simulation(zeta, g, bath1, bath2, initial, target, tf):
+def simulation(zeta, g, B, bath1, bath2, initial, target, tf):
     # target will be the target precision of a thermal population
     dt = 0.01  # arb
-    t = np.zeros(100000000)  # arb
+    t = np.zeros(100000000)  # arb EXCEPT WHEN I RUN OUT OF MEMORY WHAT
     state = np.zeros([3, 100000000])
     state[:, 0] = initial[:]
     i = 0
     while t[i] < tf:  # standard dynamic timestep trick
         test = 30 * dt * target
         # two steps of dt
-        k = rk4slope(zeta, g, bath1, bath2, state[:, i], dt)
+        k = rk4slope(zeta, g, B, bath1, bath2, state[:, i], dt)
         check1a = state[:, i] + k * dt
-        k = rk4slope(zeta, g, bath1, bath2, check1a, dt)
+        k = rk4slope(zeta, g, B, bath1, bath2, check1a, dt)
         check1 = check1a + k * dt
         # one step of 2dt
-        k = rk4slope(zeta, g, bath1, bath2, state[:, i], 2*dt)
+        k = rk4slope(zeta, g, B, bath1, bath2, state[:, i], 2*dt)
         check2 = state[:, i] + 2 * k * dt
         # checking error estimate
         check = np.max(np.absolute(check1[:2] - check2[:2]))  # only care about populations
@@ -177,4 +182,9 @@ def correlation_var(state):
 def rel_corr_var(state):
     # same as above but using other n
     return (2*state[0, :] + 1)*np.exp(-2*state[2, :])
+
+
+def rel_anti(state):
+    # same as above but using other n
+    return (2*state[0, :] + 1)*np.exp(2*state[2, :])
 

@@ -9,6 +9,7 @@ from multiprocessing import Pool
 scheme.py
 Purpose: to determine the correlation variance minimum and time below 1 for multiple cooling SS
         Here I will vary the relative loss rates for our defined pump strengths and populations
+        May generate fig 6, but a better one is not on this branch
 Date: 3 Sept 2024
 Paul RB Hughes
 """
@@ -84,6 +85,6 @@ for i, z in enumerate(zetas):
 # ax[1].legend(title="$g$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
-# plt.show()
+plt.show()
 # plt.savefig("entanglementStrength.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

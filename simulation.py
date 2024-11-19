@@ -2,6 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import coolingutils
 
+"""
+This is a cooling simulation - looking at the theta factor and populations
+"""
+
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
@@ -9,19 +13,18 @@ plt.rcParams.update({
     })
 
 
-zeta = 0.8
-gamma = 5
+zeta = 0.999
+# g = 0.5
 nb1 = 0.
 nb2 = 5.
 initial = np.array([nb1, nb2, 0])
-target = 1e-12
-tf = 5
-thetalim = 0.5 * np.arctan(-2 * gamma)
-steadylim = (nb1 + nb2) * 0.5 - zeta * (nb2 - nb1) * 0.5
+target = 1e-9
+tf = 100
+# steadylim = (nb1 + nb2) * 0.5 - zeta * (nb2 - nb1) * 0.5
+# B = kappa/Omega_m. B -> 0 is SBR
+B = 0.1
 
-
-t, state = coolingutils.simulation(zeta, gamma, nb1, nb2, initial, target, tf)
-print(state[:, -1])
+# print(state[:, -1])
 # fig, ax = plt.subplots()
 # ax.plot(t, state[0]*np.square(np.cos(state[2])) + state[1]*np.square(np.sin(state[2])), linewidth=2, label=r"$n_c$")
 # ax.plot(t, state[1]*np.square(np.cos(state[2])) + state[0]*np.square(np.sin(state[2])), linewidth=2, label=r"$n_m$")
@@ -29,26 +32,32 @@ print(state[:, -1])
 # ax.set_xlabel(r"$\tilde{t}$")
 # ax.set_ylabel("$n$")
 # ax.legend()
+gees = [0.5, 1, 2]
+stysy = [':', '-', '--']
+fig, ax = plt.subplots(2)
+for i, g in enumerate(gees):
+    t, state = coolingutils.simulation(zeta, g, B, nb1, nb2, initial, target, tf)
+    ax[0].semilogy(t, state[0]*np.square(np.cos(state[2])) + state[1]*np.square(np.sin(state[2])), linewidth=2, label=g, color='b', linestyle=stysy[i])
+    ax[0].semilogy(t, state[1]*np.square(np.cos(state[2])) + state[0]*np.square(np.sin(state[2])), linewidth=2, color='r', linestyle=stysy[i])
+    # ax[0].hlines(steadylim, 0, np.log(tf), linewidth=1.5, linestyles=":")
+    ax[0].set_xlabel(r"$\tilde{t}$")
+    ax[0].set_ylabel("$n$")
+    ax[0].legend()
+    print(f'{g}, {state[2][-1]}')
 
-fig, ax = plt.subplots(3)
-ax[0].plot(t, state[0]*np.square(np.cos(state[2])) + state[1]*np.square(np.sin(state[2])), linewidth=2, label=r"$n_c$")
-ax[0].plot(t, state[1]*np.square(np.cos(state[2])) + state[0]*np.square(np.sin(state[2])), linewidth=2, label=r"$n_m$")
-ax[0].hlines(steady, 0, np.log(tf), linewidth=1.5, linestyles=":")
-ax[0].set_xlabel(r"$\tilde{t}$")
-ax[0].set_ylabel("$n$")
-ax[0].legend()
+    #
+    # ax[1].plot(t, state[0], linewidth=2, label=r"$n_c^{th}$")
+    # ax[1].plot(t, state[1], linewidth=2, label=r"$n_m^{th}$")
+    # # ax[1].hlines(steadylim, 0, tf, linewidth=1.5, linestyles=":")
+    # ax[1].set_xlabel(r"$\tilde{t}$")
+    # ax[1].set_ylabel(r"$n_{th}$")
+    # ax[1].legend()
+    recet = ((state[2]/np.pi + 1) % 2) - 1
+    ax[1].plot(t, state[2]/np.pi, linewidth=2, label=gees[i])
+    ax[1].set_xlabel(r"$\tilde{t}$")
+    ax[1].set_ylabel(r"$\theta/\pi$")
 
-
-ax[1].plot(t, state[0], linewidth=2, label=r"$n_c^{th}$")
-ax[1].plot(t, state[1], linewidth=2, label=r"$n_m^{th}$")
-ax[1].hlines(steadylim, 0, tf, linewidth=1.5, linestyles=":")
-ax[1].set_xlabel(r"$\tilde{t}$")
-ax[1].set_ylabel(r"$n_{th}$")
 ax[1].legend()
-recet = ((state[2]/np.pi + 1) % 2) - 1
-ax[2].plot(t, state[2]/np.pi, linewidth=2, label=zeta)
-ax[2].set_xlabel(r"$\tilde{t}$")
-ax[2].set_ylabel(r"$\theta/\pi$")
 
 plt.tight_layout()
 # plt.savefig("mechanicalCooling.pdf", format='pdf', dpi=1200, bbox_inches='tight')

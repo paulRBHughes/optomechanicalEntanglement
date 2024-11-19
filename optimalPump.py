@@ -23,10 +23,10 @@ Paul RB Hughes
 # nbc = 0
 nbm = 75
 scale = 1/(nbm + 1)
-target = 1e-12
+target = 1e-11
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 10000)
-tfs = np.flip(np.logspace(-.8, 2, 10000))
+gees = np.logspace(-1.5, 1.8, 1000000)
+tfs = np.flip(np.logspace(-.8, 2, 1000000))
 colors = ['lightskyblue', 'dodgerblue', 'navy']
 
 
@@ -50,7 +50,7 @@ def optimal(z, corrlevel):
 
 gfig, gax = plt.subplots()
 tfig, tax = plt.subplots()
-levels = np.flip(np.logspace(-1, 0, 100))
+levels = np.flip(np.logspace(-1, 0, 1000))
 zetas = [0.99, 0.999, 1]
 for i, zeta in enumerate(zetas):
 
