@@ -32,7 +32,7 @@ target = 1e-11
 tf = 0.08
 gees = np.arange(0.5, 5.1, 0.1)
 tfs = np.reciprocal(gees) * 2
-zetas = [0.99, 0.999, 0.9999]
+zetas = [0.99, 0.999, 1]
 
 # Large pumping limit, subcritical squeeze
 # to help sim along, we use the unthermalized equations and approximate (pretty well tbh).
@@ -84,6 +84,6 @@ for i, z in enumerate(zetas):
 # ax[1].legend(title="$g$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
-# plt.show()
+plt.show()
 # plt.savefig("entanglementStrength.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

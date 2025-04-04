@@ -35,12 +35,10 @@ gees = [1, 5, 20]
 # tfs = np.flip(np.logspace(-0.8, 2, 100))  # this is a really bad, hacky solution. Fine for now
 tfs = [10, 2, 0.5]
 zetas = [0.99, 1]
-sts = ['-', '--', '-.']
+sts = ['--', '-', '-.']
 colors = ['lightskyblue', 'dodgerblue', 'navy']
 geelines = np.empty(np.size(gees))
 zeelines = np.empty(np.size(zetas))
-alphas = [0., 0.4, 1]
-
 
 fig, ax = plt.subplots()
 
@@ -62,10 +60,10 @@ dashed = mlines.Line2D([], [], color=colors[2], linestyle=sts[1], label=zetas[1]
 # dashdot = mlines.Line2D([], [], color=colors[2], linestyle=sts[2], label=zetas[2])
 first_legend = ax.legend(handles=[solid, dashed], title="$\zeta$")
 ax.add_artist(first_legend)
-lsb = mlines.Line2D([], [], color=colors[0], linestyle=sts[0], label=gees[0])
-db = mlines.Line2D([], [], color=colors[1], linestyle=sts[0], label=gees[1])
-navy = mlines.Line2D([], [], color=colors[2], linestyle=sts[0], label=gees[2])
-ax.legend(handles=[lsb, db, navy], title="$g_{blue}$", loc='center left')
+lsb = mlines.Line2D([], [], color=colors[0], linestyle=sts[1], label=gees[0])
+db = mlines.Line2D([], [], color=colors[1], linestyle=sts[1], label=gees[1])
+navy = mlines.Line2D([], [], color=colors[2], linestyle=sts[1], label=gees[2])
+ax.legend(handles=[lsb, db, navy], title="$g_b$", loc='center left')
 ax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
 ax.tick_params(axis='x', direction='in', top=True, left=True, which='major')
 plt.tight_layout()

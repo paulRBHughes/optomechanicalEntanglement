@@ -22,8 +22,6 @@ styles = [":", "-.", '--', '-']
 reds = ['lightcoral', 'firebrick', 'darkred', 'red']
 blues = ['lightskyblue', 'dodgerblue', 'navy', 'blue']
 
-detuning_factor = 10
-
 fig, ax = plt.subplots()
 theta = 0.5 * np.arctan(-2 * gammas)
 for i, Z in enumerate(Zs):
@@ -46,6 +44,6 @@ ax.legend(title="$\zeta$", loc='center left')
 # ax.set_title("Steady-State")
 plt.tight_layout()
 
-# plt.show()
-plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.show()
+# plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

@@ -21,7 +21,7 @@ Paul RB Hughes
 # nbc = 0
 nbm = 75
 scale = 1/(nbm + 1)
-target = 1e-12
+target = 1e-11
 # tf = 0.08
 gees = np.logspace(-1.5, 1.8, 1000)
 tfs = np.flip(np.logspace(-.8, 2, 1000))
@@ -56,8 +56,8 @@ for j, cl in enumerate(cls):
     for i, zeta in enumerate(zetas):
         ax.semilogx(gees, timeunder(zeta, cl, False), linewidth=2, label=zeta, linestyle=styts[i], color=colors[j])
 
-ax.set_xlabel(r"$g$")
-ax.set_ylabel(r"$\tau(0.8)$")
+ax.set_xlabel(r"$g_b$")
+ax.set_ylabel(r"$\tilde{\tau}(0.8)$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
 ax.set_xlim([0.2, ax.get_xlim()[1]])
@@ -71,4 +71,4 @@ ax.set_xlim([0.2, ax.get_xlim()[1]])
 # navy = mlines.Line2D([], [], color=colors[2], linestyle=styts[0], label=cls[2])
 # ax.legend(handles=[lsb, db, navy], title="$(\Delta_{12}^2)_{target}$", loc='lower left')
 # plt.show()
-plt.savefig(f"timeunder0.8.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.savefig(f"tildetau0.8.pdf", format='pdf', dpi=1200, bbox_inches='tight')

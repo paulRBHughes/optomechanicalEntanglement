@@ -13,7 +13,7 @@ plt.rcParams.update({
 zeta = 0.99
 gamma = 2
 nb1 = 0
-nb2 = 5
+nb2 = 40
 initial = np.array([nb1, nb2, 0, 0])
 target = 1e-9
 tf = 200
@@ -41,16 +41,16 @@ for i, detuning in enumerate(detunings):
 ax[0].set_xlabel(r"$\tilde{t}$")
 ax[0].set_ylabel(r"$\theta/\pi$")
 ax[0].set_xlim([0, 10])
-ax[0].text(1, -0.1, "(a)", fontfamily="Computer Modern Roman", fontsize="large", horizontalalignment='center',
+ax[0].text(2, -0.1, "(a)", fontfamily="Computer Modern Roman", fontsize="large", horizontalalignment='center',
         verticalalignment='center')
-ax[1].text(1, 0.2, "(b)", fontfamily="Computer Modern Roman", fontsize="large", horizontalalignment='center',
+ax[1].text(1, 2, "(b)", fontfamily="Computer Modern Roman", fontsize="large", horizontalalignment='center',
         verticalalignment='center')
 ax[1].set_xlim([0.1, ax[1].get_xlim()[1]])
 ax[1].set_xlabel(r"$\tilde{t}$")
 ax[1].set_ylabel(r"$n_{m}$")
 # ax.set_xlabel(r"$\tilde{t}$")
 # ax.set_ylabel(r"$n$")
-ax[1].legend(title=r"$\delta_r$")
+ax[1].legend(title=r"$\Delta_+/\Gamma_+$")
 
 ax[0].tick_params(axis='y', direction='in', top=True, right=True, which='both')
 ax[1].tick_params(axis='y', direction='in', top=True, right=True, which='both')
