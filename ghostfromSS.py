@@ -36,7 +36,7 @@ def modepop(ntha, nthb, u):
 
 fig, ax = plt.subplots()
 
-n1b = 0.01
+n1b = 0.001
 n2b = 0.5
 epsilon = 0.01
 # zmax = 0.6
@@ -63,7 +63,7 @@ numLevels = [0.01, 0.03, 0.1, 0.3, 1.]
 
 steadycor = ax.contourf(Z, G, (SNR), np.append(levs, [1.5, 1.6]), cmap='viridis', origin="lower")
 # ploting isonums of n1
-CS = ax.contour(Z, G, SSvals[1], levels=numLevels)
+CS = ax.contour(Z, G, modepop(SSvals[1], SSvals[2], SSvals[0]), levels=numLevels)
 ax.clabel(CS)
 
 ax.set_xlabel("$\zeta$")
@@ -71,6 +71,8 @@ ax.set_ylabel("$g$")
 plt.tight_layout()
 
 fig.colorbar(steadycor, ax=ax, label=r"$SNR$")
+
+plt.savefig("ghost/zetaSNR.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 
 ##
 zeta = 0.25
@@ -89,7 +91,7 @@ fig, ax = plt.subplots()
 
 steadycor = ax.contourf(N, Gn, SNR, np.append(levs, [1.5, 1.6, 1.7, 1.8, 1.9]), cmap='viridis', origin="lower")
 # ploting isonums of n1
-CS = ax.contour(N, Gn, SSvals[1], levels=numLevels)
+CS = ax.contour(N, Gn, modepop(SSvals[1], SSvals[2], SSvals[0]), levels=numLevels)
 ax.clabel(CS)
 
 ax.set_xlabel("$n_2^b$")
@@ -99,5 +101,5 @@ plt.tight_layout()
 fig.colorbar(steadycor, ax=ax, label=r"$SNR$")
 
 
-plt.savefig("SNR.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.savefig("ghost/numberSNR.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 plt.show()
