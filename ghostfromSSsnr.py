@@ -42,7 +42,9 @@ def g2(n1th, n2th, u):
 def placeholder(nath, nbth, u):
     c = np.cosh(u)
     s = np.sinh(u)
-    return (nath**2 - nbth) * c**4 + 4 * nath * (nbth + 1) * c**2 * s**2 + (nbth + 1) * (nbth + 2) * s**4 + nath * c**2 + (nbth + 1) * s**2
+    a = nath**2 * (nath + 1)*c**6 * s**2 + (nath + 1)*(nbth + 1)**2 + nath**3 * nbth * c**6 * s**2 + (nath + 1)**2 \
+        * nath * nbth * c**2 * s**6 + nath**2 * nbth * (nbth + 1) * c**4 * s**4 + nath * (nath + 1) * (nbth + 1) * c**4 * s**4
+    return a
 
 
 def backgroundnoise(n1th, n2th, u):
@@ -58,24 +60,21 @@ def noisefunction(n1th, n2th, u):
     s = np.sinh(u)
     n1 = modepop(n1th, n2th, u)
     n2 = modepop(n2th, n1th, u)
-    a = placeholder(n1th, n2th, u) * placeholder(n2th, n1th, u)
-    b = (c**2 * s**2 * n1th * n2th * (2 * c**2 * (n1th - 1) + 2 * s**2 * (n2th + 1) + 1)
-         * (2 * c**2 * (n2th - 1) + 2 * s**2 * (n1th + 1) + 1))
-    c = (c**2 * s**2 * (n1th + 1) * (n2th + 1) * (2 * c**2 * n1th + 2 * s**2 * (n2th + 2) + 1)
-         * (2 * c**2 * n2th + 2 * s**2 * (n1th + 2) + 1))
-    d = n1th * n2th * (n1th - 1) * (n2th - 1) * c**4 * s**4
-    e = (n1th + 1) * (n1th + 2) * (n2th + 1) * (n2th + 2) * c**4 * s**4
-    signoise = a + b + c + d + e - g2(n1th, n2th, u) **2
+    a = c**4 * s**4 * (n1th**2 * n2th**2 + n1th * n2th * (n1th + 1) * (n2th + 1) + (n1th + 1)**2 * (n2th + 1)**2)
+    b = ((n1th + 1)**2 + (n1th + 1)) * ((n2th + 1)**2 + (n2th + 1)) * c**4 * s**4 + (n1th**2 - n1th) * (n2th**2 - n2th) * c**4 * s**4
+    c = c**2 * s**2 * (n1th * n2th + (n1th + 1) * (n2th + 1)) * (c**4 * n1th * n2th + c**2 * s**2
+                                                                 * (n1th**2 + n1th + n2th**2 + n2th) + s**4 * (n1th + 1) * (n2th + 1))
+    signoise = (n1*n2)**2 + placeholder(n1th, n2th, u) + placeholder(n2th, n1th, u) + a + b + c + - g2(n1th, n2th, u)**2
     bgnoise = backgroundnoise(n1th, n2th, u)
-    return np.sqrt(bgnoise)
+    return np.sqrt(signoise)
 
 
 
 fig, ax = plt.subplots()
 
-n1b = 1e-7
+n1b = 1e-3
 n2b = 0.1
-epsilon = 1e-2
+epsilon = 1e-3
 # zmax = 0.6
 # gmax = 1 - zmax**2
 zs = np.arange(-1, 1, 0.001)
@@ -92,16 +91,17 @@ for i, gs in enumerate(G):
 
 SSvals = steady(Z, Gp, n1b, n2b)
 
-DeltaG2 = dg2(SSvals[1], SSvals[2], SSvals[0])
+# DeltaG2 = dg2(SSvals[1], SSvals[2], SSvals[0])
+G2 = g2(SSvals[1], SSvals[2], SSvals[0])
 noise = noisefunction(SSvals[1], SSvals[2], SSvals[0])
-SNR = DeltaG2 / noise
+SNR = G2 / noise
 
 levs = np.linspace(-15, 3, 13)
 numLevels = [0.01, 0.03, 0.1, 0.3, 1.]
 
 
 
-steadycor = ax.contourf(Z, G, np.log10(SNR), cmap='viridis', origin="lower")
+steadycor = ax.contourf(Z, G, 10*np.log10(SNR), cmap='viridis', origin="lower")
 # ploting isonums of n1
 CS = ax.contour(Z, G, modepop(SSvals[1], SSvals[2], SSvals[0]), levels=numLevels, linestyles="dotted")
 # ax.clabel(CS)
@@ -115,12 +115,11 @@ ax.set_xlabel("$\zeta$")
 ax.set_ylabel("$g$")
 plt.tight_layout()
 
-fig.colorbar(steadycor, ax=ax, label=r"$SNR (dB)$")
+fig.colorbar(steadycor, ax=ax, label=r"SNR (dB)")
 
 # plt.savefig("ghost/VRefined.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 
 print(np.nanmax(10*np.log10(SNR)))
-print(np.nanmin(10*np.log10(SNR)))
 
 ##
 # zeta = 0.25
