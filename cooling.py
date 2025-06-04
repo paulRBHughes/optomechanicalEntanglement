@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 gammas = np.arange(0, 3.01, 0.01)

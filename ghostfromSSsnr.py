@@ -66,15 +66,15 @@ def noisefunction(n1th, n2th, u):
                                                                  * (n1th**2 + n1th + n2th**2 + n2th) + s**4 * (n1th + 1) * (n2th + 1))
     signoise = (n1*n2)**2 + placeholder(n1th, n2th, u) + placeholder(n2th, n1th, u) + a + b + c + - g2(n1th, n2th, u)**2
     bgnoise = backgroundnoise(n1th, n2th, u)
-    return np.sqrt(signoise)
+    return np.sqrt(signoise + bgnoise)
 
 
 
 fig, ax = plt.subplots()
 
-n1b = 1e-3
-n2b = 0.1
-epsilon = 1e-3
+n1b = 0
+n2b = 10
+epsilon = 1e-2
 # zmax = 0.6
 # gmax = 1 - zmax**2
 zs = np.arange(-1, 1, 0.001)
@@ -91,12 +91,12 @@ for i, gs in enumerate(G):
 
 SSvals = steady(Z, Gp, n1b, n2b)
 
-# DeltaG2 = dg2(SSvals[1], SSvals[2], SSvals[0])
-G2 = g2(SSvals[1], SSvals[2], SSvals[0])
+DeltaG2 = dg2(SSvals[1], SSvals[2], SSvals[0])
+# G2 = g2(SSvals[1], SSvals[2], SSvals[0])
 noise = noisefunction(SSvals[1], SSvals[2], SSvals[0])
-SNR = G2 / noise
+SNR = DeltaG2 / noise
 
-levs = np.linspace(-15, 3, 13)
+# levs = np.linspace(-15, 3, 13)
 numLevels = [0.01, 0.03, 0.1, 0.3, 1.]
 
 

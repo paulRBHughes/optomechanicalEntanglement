@@ -19,24 +19,24 @@ def steady(zeta, g, n1b, n2b):
     # if g == 0:
     #     return np.zeros([3, np.size(g)])
     u = 0.5 * np.arctanh(g)
-    n1th = ((1 - zeta) * np.square(np.cosh(u)) * n1b + (1 - zeta) * np.square(np.sinh(u)) * (1 + n2b)) / (
+    n1th = ((1 + zeta) * np.square(np.cosh(u)) * n1b + (1 - zeta) * np.square(np.sinh(u)) * (1 + n2b)) / (
                 1 + zeta * np.cosh(2 * u))
-    n2th = ((1 + zeta) * np.square(np.cosh(u)) * n2b + (1 + zeta) * np.square(np.sinh(u)) * (1 + n1b)) / (
+    n2th = ((1 - zeta) * np.square(np.cosh(u)) * n2b + (1 + zeta) * np.square(np.sinh(u)) * (1 + n1b)) / (
                 1 - zeta * np.cosh(2 * u))
     return np.array([u, n1th, n2th])
 
 
 def dg2(n1th, n2th, u):
-    return np.square((n1th + n2th + 1) * np.sinh(2*u)) * 0.25
+    return np.square(np.sinh(2*u)) * 0.25 * (2 * n1th * n2th + n1th + n2th + 1)
 
 
 def modepop(ntha, nthb, u):
     return ntha*np.square(np.cosh(u)) + (nthb + 1)*np.square(np.sinh(u))
 
 Nframe = 50
-n1bs = np.flip(np.logspace(-7, -1, Nframe))
 # n1bs = np.flip(np.linspace(0.25, 0.75, Nframe))
-n2b = 1
+n2b = 0.1
+n1bs = np.flip(np.logspace(-7, np.log10(n2b), Nframe))
 epsilon = 0.01
 zs = np.arange(-1, 1, 0.001)
 gees = np.arange(0, 1, 0.001)
@@ -49,9 +49,15 @@ for i, gs in enumerate(G):
         if g**2 >= cond - epsilon:
             Gp[i][j:] = np.NaN
             break
+#
+#
+# ## Calculate the maximum for the SNR bar
+# stedmax = steady(zs[-1], 1 - (zs[-1])**2, n1bs[-1], n2b)
+# Smax = dg2(stedmax[1], stedmax[2], stedmax[0])
+# barmax = Smax/(modepop(stedmax[1], stedmax[2], stedmax[0]) * modepop(stedmax[2], stedmax[1], stedmax[0]))
 
 fig, ax = plt.subplots()
-levs = [0, 0.5, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 2, 4]
+levs = np.linspace(0, 1, 9)
 # levs = np.arange(0, 6)
 numLevels = [0.01, 0.03, 0.1, 0.3, 1.]
 ax.set_xlabel("$\zeta$")
@@ -67,8 +73,9 @@ def animate(i):
     global cf, nb_text, isonum, levs, numLevels, mx
     SSvals = steady(Z, Gp, n1b, n2b)
     DeltaG2 = dg2(SSvals[1], SSvals[2], SSvals[0])
-    SNR = DeltaG2/(modepop(SSvals[1], SSvals[2], SSvals[0]) * modepop(SSvals[2], SSvals[1], SSvals[0]))
-    locs = np.unravel_index(np.nanargmax(SNR), SNR.shape)
+    V = DeltaG2 / (DeltaG2 + modepop(SSvals[1], SSvals[2], SSvals[0]) * modepop(SSvals[2], SSvals[1], SSvals[0]))
+    # SNR = DeltaG2/(modepop(SSvals[1], SSvals[2], SSvals[0]) * modepop(SSvals[2], SSvals[1], SSvals[0]))
+    locs = np.unravel_index(np.nanargmax(V), V.shape)
     # print(np.nanmax(SNR))
 
     nb_text.set_text(f"$n_1^b = {n1b}$")
@@ -79,18 +86,18 @@ def animate(i):
     for coll in isonum.collections:
         coll.remove()
 
-    cf = ax.contourf(Z, G, SNR, levs, cmap='viridis', origin="lower")
+    cf = ax.contourf(Z, G, V, levs, cmap='viridis', origin="lower")
     isonum = ax.contour(Z, G, modepop(SSvals[1], SSvals[2], SSvals[0]), numLevels)
     # mx = ax.plot(zs[locs[0]], gees[locs[1]], 'ro')
     mx.set_data(zs[locs[0]], gees[locs[1]])
     return mx,
 
 
-fig.colorbar(cf, ax=ax, label=r"$SNR$")
+fig.colorbar(cf, ax=ax, label=r"$V$")
 
 
 anim = animation.FuncAnimation(fig, animate, frames=Nframe)
-anim.save("ghost/what.gif", writer='pillow', fps=6)
+anim.save("ghost/VanimationRefined.gif", writer='pillow', fps=6)
 
 fig.clf()
 

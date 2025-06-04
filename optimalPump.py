@@ -11,7 +11,7 @@ from multiprocessing import Pool
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 """
@@ -26,8 +26,8 @@ nbm = 75
 scale = 1/(nbm + 1)
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 100)
-tfs = np.flip(np.logspace(-.8, 2, 100))
+gees = np.logspace(-1.5, 1.8, 10000)
+tfs = np.flip(np.logspace(-.8, 2, 10000))
 colors = ['dodgerblue', 'navy']
 
 
@@ -91,7 +91,7 @@ for i, zeta in enumerate(zetas):
     tax.loglog(levels, opts[1], linewidth=2, label=zeta, color=colors[i], linestyle='-')
 # np.savetxt(f"optPumps{zeta}", opts)
 
-gax.set_xlabel(r"$\Delta_{t}$")
+gax.set_xlabel(r"$\Delta^2_{t}$")
 gax.set_ylabel(r"$g_{b}$")
 gax.set_ylim([3e-2, gax.get_ylim()[1]])
 
@@ -103,7 +103,7 @@ gax.add_artist(first_legend)
 
 gax.legend(title="$\zeta$",loc="lower left")
 
-tax.set_xlabel(r"$\Delta_{t}$")
+tax.set_xlabel(r"$\Delta^2_{t}$")
 tax.set_ylabel(r"$\tilde{\tau}_{max}$")
 tax.legend(title="$\zeta$")
 

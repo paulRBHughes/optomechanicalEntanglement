@@ -16,7 +16,7 @@ Paul RB Hughes
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 # gees = np.array([0.5, 2, 5])

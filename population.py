@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+
 
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 gammas = np.arange(0.001, 10.001, 0.001)
@@ -37,13 +39,19 @@ for i, Z in enumerate(Zs):
 # print(theta)
 
 
-ax.set_xlabel(r"$\bar{n}_c$")
+ax.set_xlabel(r"$g$")
 ax.set_ylabel("$n^{ss}$")
 # ax.set_xlim(1, 2e5)
 ax.legend(title="$\zeta$", loc='center left')
 # ax.set_title("Steady-State")
 plt.tight_layout()
 
-plt.show()
-# plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+# red = mlines.Line2D([], [], color='red', linestyle='-', label='$n_m^{ss}$')
+# blue = mlines.Line2D([], [], color='blue', linestyle='-', label='$n_c^{ss}$')
+#
+# first_legend = ax.legend(handles=[red, blue], loc='lower right')
+# ax.add_artist(first_legend)
+
+# plt.show()
+plt.savefig("drivevss.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

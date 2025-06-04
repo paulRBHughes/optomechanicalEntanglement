@@ -18,13 +18,13 @@ Paul RB Hughes
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 # tfs = [12, 3, 2]
 # zetas = np.arange(0.98, 0.9999, 0.0001)
 nbc = 0
-nbm = 75
+nbm = 200
 scale = 1/(nbm + 1)
 # G, Z = np.meshgrid(gammas, zetas)
 target = 1e-11
@@ -58,15 +58,15 @@ ax.set_ylabel(r"$\Delta_{12}^2$")
 solid = mlines.Line2D([], [], color=colors[2], linestyle=sts[0], label=zetas[0])
 dashed = mlines.Line2D([], [], color=colors[2], linestyle=sts[1], label=zetas[1])
 # dashdot = mlines.Line2D([], [], color=colors[2], linestyle=sts[2], label=zetas[2])
-first_legend = ax.legend(handles=[solid, dashed], title="$\zeta$")
+first_legend = ax.legend(handles=[solid, dashed], title="$\zeta$", loc='lower right')
 ax.add_artist(first_legend)
 lsb = mlines.Line2D([], [], color=colors[0], linestyle=sts[1], label=gees[0])
 db = mlines.Line2D([], [], color=colors[1], linestyle=sts[1], label=gees[1])
 navy = mlines.Line2D([], [], color=colors[2], linestyle=sts[1], label=gees[2])
-ax.legend(handles=[lsb, db, navy], title="$g_b$", loc='center left')
+ax.legend(handles=[lsb, db, navy], title="$g$", loc='lower left')
 ax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
 ax.tick_params(axis='x', direction='in', top=True, left=True, which='major')
 plt.tight_layout()
-# plt.show()
-plt.savefig("transientEntanglement.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+plt.show()
+# plt.savefig("transientEntanglement.pdf", format='pdf', dpi=1200, bbox_inches='tight')
 

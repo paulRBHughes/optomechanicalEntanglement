@@ -6,7 +6,7 @@ import scipy.signal as signal
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
-        "font.size": "14"
+        "font.size": "16"
     })
 
 
@@ -50,7 +50,7 @@ ax[1].set_xlabel(r"$\tilde{t}$")
 ax[1].set_ylabel(r"$n_{m}$")
 # ax.set_xlabel(r"$\tilde{t}$")
 # ax.set_ylabel(r"$n$")
-ax[1].legend(title=r"$\Delta_+/\Gamma_+$")
+ax[1].legend(title=r"$\Delta_+/\Gamma_+$", fontsize=14)
 
 ax[0].tick_params(axis='y', direction='in', top=True, right=True, which='both')
 ax[1].tick_params(axis='y', direction='in', top=True, right=True, which='both')
