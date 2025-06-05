@@ -19,20 +19,23 @@ Paul RB Hughes
 """
 
 # nbc = 0
-nbm = 150
+nbm = 1
 scale = 1/(nbm + 1)
 target = 1e-11
 # tf = 0.08
 gees = np.logspace(-1.5, 1.8, 100)
-tfs = np.flip(np.logspace(-.8, 2, 100))
+# tfs = np.flip(np.logspace(-.8, 2, 100))
+tf = 100
+corrmax = 2*scale
+
 
 
 def timeunder(z, corrlevel, optimal=True):
     tau = np.zeros(np.size(gees))
     for i, g in enumerate(gees):
-        tf = tfs[i]
+        # tf = tfs[i]
         ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # assumes large bath for mech
-        t, state = utils.rel_simulation(z, g, 0, 0, ic, target, tf)
+        t, state = utils.rel_simulation(z, g, 0, 0, ic, corrmax, target, tf)
         corr = utils.rel_corr_var(state)
         mc = np.min(corr)
         # now I want to find time it is entangled
@@ -48,7 +51,7 @@ def timeunder(z, corrlevel, optimal=True):
 
 
 cls = [0.8]  # I want to see how long the pump can keep the correlation variance under this value for
-zetas = [1, 0.999, 0.99]
+zetas = [1]
 fig, ax = plt.subplots()
 styts = ["-", '--', '-.', ':']
 colors = ['navy', 'dodgerblue', 'lightskyblue']

@@ -22,12 +22,14 @@ Paul RB Hughes
 """
 
 # nbc = 0
-nbm = 75
-scale = 1/(nbm + 1)
+# nbm = 75
+nbs = np.arange(0.1, 500.6, 0.5)
+# scale = 1/(nbm + 1)
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 10000)
-tfs = np.flip(np.logspace(-.8, 2, 10000))
+gees = np.logspace(-1.5, 1.8, 100)
+tf = 1000
+# tfs = np.flip(np.logspace(-.8, 2, 1000))
 colors = ['dodgerblue', 'navy']
 
 
@@ -48,6 +50,7 @@ def optimal(z, corrlevel):
         gopt[j] = gees[np.argmax(corrtimes)]
         mingindex = np.nonzero(corrtimes)[0][0]
         minima[j] = gees[mingindex]
+        # print(f"finished level {corrlevel[j]}")
 
     return gopt, taumax, minima
 
@@ -57,16 +60,22 @@ gfig, gax = plt.subplots()
 #                    bbox_to_anchor=(.32, .05, .65, .55),
 #                    bbox_transform=gax.transAxes, loc="lower left")
 tfig, tax = plt.subplots()
-levels = np.flip(np.logspace(-1, 0, 10000))
-zetas = [0.99, 1]
-for i, zeta in enumerate(zetas):
+levels = np.flip(np.logspace(-1, -0.01, 10000))
+C, N = np.meshgrid(levels, nbs)
+# zetas = [0.99, 1]
+Gopts = np.zeros(np.shape(C))
+Topts = np.zeros(np.shape(C))
+zeta = 0.99
+for i, nbm in enumerate(nbs):
+    scale = 1/(nbm + 1)
+    corrmax = 2 * scale
 
 
     def timeunder(k):
         g = gees[k]
-        tf = tfs[k]  # there is a tf we have previously determined that captures the end of entanglement and not much longer
+        # tf = tfs[k]  # there is a tf we have previously determined that captures the end of entanglement and not much longer
         ic = np.array([-0.5 * zeta * scale * nbm, -scale * nbm, 0])  # we set the IC according to the tilde eqns
-        t, state = utils.rel_simulation(zeta, g, 0, 0, ic, target, tf)  # and simulate the squeeze
+        t, state = utils.rel_simulation(zeta, g, 0, 0, ic, corrmax, target, tf)  # and simulate the squeeze
         corr = utils.rel_corr_var(state)  # get the correlation variance
         mc = np.min(corr)  # find its minimum
         taus = np.zeros(np.size(levels))
@@ -82,37 +91,49 @@ for i, zeta in enumerate(zetas):
 
 
     opts = optimal(zeta, levels)
-    gax.loglog(levels, opts[0], linewidth=2, label=zeta, color=colors[i], linestyle='-')
-    gbound = (1 + (1 - zeta)*nbm)*np.reciprocal(levels) - 1  # this is a lower bound
-    gmin = opts[2]
-    gax.loglog(levels, gmin, linewidth=2, color=colors[i], linestyle='--')
+    Gopts[i, :] = opts[0]
+    Topts[i, :] = opts[1]
+
+np.save(f"goptszeta{zeta}smallnb.txt", Gopts)
+np.save(f"toptszeta{zeta}smallnb.txt", Topts)
+
+GCF = gax.contourf(C, N, Gopts, cmap='viridis', origin="lower")
+TCF = tax.contourf(C, N, Topts, cmap='viridis', origin="lower")
+# gax.loglog(levels, opts[0], linewidth=2, label=zeta, color=colors[i], linestyle='-')
+    # gbound = (1 + (1 - zeta)*nbm)*np.reciprocal(levels) - 1  # this is a lower bound
+    # gmin = opts[2]
+    # gax.loglog(levels, gmin, linewidth=2, color=colors[i], linestyle='--')
     # axins.loglog(levels, gmin, linewidth=2, color=colors[i], linestyle='--')
-    gax.loglog(levels, gbound, linewidth=2, color=colors[i], linestyle=':')
-    tax.loglog(levels, opts[1], linewidth=2, label=zeta, color=colors[i], linestyle='-')
+    # gax.loglog(levels, gbound, linewidth=2, color=colors[i], linestyle=':')
+# tax.loglog(levels, opts[1], linewidth=2, label=zeta, color=colors[i], linestyle='-')
 # np.savetxt(f"optPumps{zeta}", opts)
 
 gax.set_xlabel(r"$\Delta^2_{t}$")
-gax.set_ylabel(r"$g_{b}$")
-gax.set_ylim([3e-2, gax.get_ylim()[1]])
+gax.set_ylabel(r"$n_m^b$")
+gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
 
-solid = mlines.Line2D([], [], color=colors[1], linestyle='-', label='$g_{opt}$')
-dashed = mlines.Line2D([], [], color=colors[1], linestyle='--', label='$g_{min}$')
-dotted = mlines.Line2D([], [], color=colors[1], linestyle=':', label='$g_{bound}$')
-first_legend = gax.legend(handles=[solid, dashed, dotted], loc=8)
-gax.add_artist(first_legend)
 
-gax.legend(title="$\zeta$",loc="lower left")
+# gax.set_ylim([3e-2, gax.get_ylim()[1]])
+#
+# solid = mlines.Line2D([], [], color=colors[1], linestyle='-', label='$g_{opt}$')
+# dashed = mlines.Line2D([], [], color=colors[1], linestyle='--', label='$g_{min}$')
+# dotted = mlines.Line2D([], [], color=colors[1], linestyle=':', label='$g_{bound}$')
+# first_legend = gax.legend(handles=[solid, dashed, dotted], loc=8)
+# gax.add_artist(first_legend)
+#
+# gax.legend(title="$\zeta$",loc="lower left")
 
 tax.set_xlabel(r"$\Delta^2_{t}$")
-tax.set_ylabel(r"$\tilde{\tau}_{max}$")
-tax.legend(title="$\zeta$")
-
-gax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
-tax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
-gax.tick_params(axis='x', direction='in', top=True, left=True, which='major')
-tax.tick_params(axis='x', direction='in', top=True, right=True, which='major')
+tax.set_ylabel(r"$n_m^b$")
+tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
+# tax.legend(title="$\zeta$")
+#
+# gax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
+# tax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
+# gax.tick_params(axis='x', direction='in', top=True, left=True, which='major')
+# tax.tick_params(axis='x', direction='in', top=True, right=True, which='major')
 
 plt.tight_layout()
 # plt.show()
-gfig.savefig(f"optimalPump.pdf", format='pdf', dpi=1200)
-tfig.savefig(f"optimalTime.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+gfig.savefig(f"SmallnboptimalPumpVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200)
+tfig.savefig(f"SmallnboptimalTimeVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200, bbox_inches='tight')

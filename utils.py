@@ -101,7 +101,7 @@ def simulation(zeta, g, bath1, bath2, initial, target, tf):
     state = np.zeros([3, 100000000])
     state[:, 0] = initial[:]
     i = 0
-    while t[i] < tf:  # standard dynamic timestep trick
+    while t[i] < tf and ((1 + state[0, i] + state[1, i]) * np.exp(-2 * state[2, i]) < 2):  # standard dynamic timestep trick
         test = 30 * dt * target
         # two steps of dt
         k = rk4slope(zeta, g, bath1, bath2, state[:, i], dt)
@@ -136,14 +136,15 @@ def rel_rk4slope(zeta, g, avb, db, state, dt):
     return k1/6 + k2/3 + k3/3 + k4/6
 
 
-def rel_simulation(zeta, g, avb, db, initial, target, tf):
+def rel_simulation(zeta, g, avb, db, initial, corrmax, target, tf):
     # same as above w
     dt = 0.01  # arb
     t = np.zeros(100000000)  # arb
     state = np.zeros([3, 100000000])
     state[:, 0] = initial[:]
     i = 0
-    while t[i] < tf:  # standard dynamic timestep trick
+    # adding a check in here for corr var < 2
+    while (t[i] < tf) and (2*state[0, i] + 1)*np.exp(-2*state[2, i]) < corrmax:  # standard dynamic timestep trick
         test = 30 * dt * target
         # two steps of dt
         k = rel_rk4slope(zeta, g, avb, db, state[:, i], dt)
@@ -154,7 +155,7 @@ def rel_simulation(zeta, g, avb, db, initial, target, tf):
         k = rel_rk4slope(zeta, g, avb, db, state[:, i], 2*dt)
         check2 = state[:, i] + 2 * k * dt
         # checking error estimate
-        check = np.max(np.absolute(check1[:2] - check2[:2]))  # only care about populations
+        check = np.absolute(check1[2] - check2[2])  # only care about u <3
         if check < 0.5 * test:
             rho = 2
         else:

@@ -24,30 +24,32 @@ plt.rcParams.update({
 # tfs = [12, 3, 2]
 # zetas = np.arange(0.98, 0.9999, 0.0001)
 nbc = 0
-nbm = 200
+nbm = 100
 scale = 1/(nbm + 1)
 # G, Z = np.meshgrid(gammas, zetas)
 target = 1e-11
-tf = 0.08
 # gees = np.arange(0.5, 5.1, 0.1)
 # gees = np.logspace(-1.5, 1.8, 100)
-gees = [1, 5, 20]
+gees = [1, 5, 100]
 # tfs = np.flip(np.logspace(-0.8, 2, 100))  # this is a really bad, hacky solution. Fine for now
 tfs = [10, 2, 0.5]
+tf = 100
 zetas = [0.99, 1]
 sts = ['--', '-', '-.']
 colors = ['lightskyblue', 'dodgerblue', 'navy']
 geelines = np.empty(np.size(gees))
 zeelines = np.empty(np.size(zetas))
+corrmax = 2*scale
 
 fig, ax = plt.subplots()
 
 for j, g in enumerate(gees):
-    tf = tfs[j]
+    # tf = tfs[j]
     for i, z in enumerate(zetas):
         ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # assumes large bath for mech
-        t, state = utils.rel_simulation(z, g, 0, 0, ic, target, tf)
+        t, state = utils.rel_simulation(z, g, 0, 0, ic, corrmax, target, tf)
         corr = utils.rel_corr_var(state) * (nbm + 1)
+        print('okay')
         ax.loglog(t, corr, linewidth=2, linestyle=sts[i], color=colors[j])
 
 
