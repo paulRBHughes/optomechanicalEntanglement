@@ -22,12 +22,13 @@ Paul RB Hughes
 """
 
 # nbc = 0
-# nbm = 75
-nbs = np.arange(0.1, 250.6, 5)
-# scale = 1/(nbm + 1)
+nbm = 75
+# nbs = np.arange(0.1, 250.6, 5)
+scale = 1/(nbm + 1)
+corrmax = 2 * scale
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 2.1, 1000)
+gees = np.logspace(-1.5, 2.1, 10000)
 tf = 100
 # tfs = np.flip(np.logspace(-.8, 2, 1000))
 colors = ['dodgerblue', 'navy']
@@ -61,14 +62,14 @@ gfig, gax = plt.subplots()
 #                    bbox_transform=gax.transAxes, loc="lower left")
 tfig, tax = plt.subplots()
 levels = np.flip(np.logspace(-1, -0.01, 10000))
-C, N = np.meshgrid(levels, nbs)
-# zetas = [0.99, 1]
+zetas = np.arange(0.99, 1, 0.001)
+C, Z = np.meshgrid(levels, zetas)
 Gopts = np.zeros(np.shape(C))
 Topts = np.zeros(np.shape(C))
-zeta = 0.995
-for i, nbm in enumerate(nbs):
-    scale = 1/(nbm + 1)
-    corrmax = 2 * scale
+# zeta = 0.995
+for i, zeta in enumerate(zetas):
+    # scale = 1/(nbm + 1)
+    # corrmax = 2 * scale
 
 
     def timeunder(k):
@@ -93,15 +94,15 @@ for i, nbm in enumerate(nbs):
     opts = optimal(zeta, levels)
     Gopts[i, :] = opts[0]
     Topts[i, :] = opts[1]
-    print(f"nb={nbm} done")
+    print(f"zeta={zeta} done")
 
-np.save(f"goptszeta{zeta}", Gopts)
-np.save(f"toptszeta{zeta}", Topts)
-np.save(f"goptszeta{zeta}NBS", N)
-np.save(f"goptszeta{zeta}LEV", C)
+np.save(f"Zvargopts", Gopts)
+np.save(f"Zvartopts", Topts)
+np.save(f"ZvargoptsNBS", Z)
+np.save(f"ZvargoptsLEV", C)
 
-GCF = gax.contourf(C, N, Gopts, cmap='viridis', origin="lower")
-TCF = tax.contourf(C, N, Topts, cmap='viridis', origin="lower")
+GCF = gax.contourf(C, Z, Gopts, cmap='viridis', origin="lower")
+TCF = tax.contourf(C, Z, Topts, cmap='viridis', origin="lower")
 # gax.loglog(levels, opts[0], linewidth=2, label=zeta, color=colors[i], linestyle='-')
     # gbound = (1 + (1 - zeta)*nbm)*np.reciprocal(levels) - 1  # this is a lower bound
     # gmin = opts[2]
@@ -112,7 +113,7 @@ TCF = tax.contourf(C, N, Topts, cmap='viridis', origin="lower")
 # np.savetxt(f"optPumps{zeta}", opts)
 
 gax.set_xlabel(r"$\Delta^2_{t}$")
-gax.set_ylabel(r"$n_m^b$")
+gax.set_ylabel(r"$\zeta$")
 gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
 
 
@@ -127,7 +128,7 @@ gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
 # gax.legend(title="$\zeta$",loc="lower left")
 
 tax.set_xlabel(r"$\Delta^2_{t}$")
-tax.set_ylabel(r"$n_m^b$")
+tax.set_ylabel(r"$\zeta$")
 tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
 # tax.legend(title="$\zeta$")
 #
@@ -138,5 +139,5 @@ tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
 
 plt.tight_layout()
 # plt.show()
-gfig.savefig(f"optimalPumpVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200)
-tfig.savefig(f"optimalTimeVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+gfig.savefig(f"optimalPumpVaryZeta.pdf", format='pdf', dpi=1200)
+tfig.savefig(f"optimalTimeVaryZeta.pdf", format='pdf', dpi=1200, bbox_inches='tight')
