@@ -23,12 +23,12 @@ Paul RB Hughes
 
 # nbc = 0
 # nbm = 75
-nbs = np.arange(0.1, 500.6, 0.5)
+nbs = np.arange(0.1, 250.6, 5)
 # scale = 1/(nbm + 1)
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 100)
-tf = 1000
+gees = np.logspace(-1.5, 2.1, 1000)
+tf = 100
 # tfs = np.flip(np.logspace(-.8, 2, 1000))
 colors = ['dodgerblue', 'navy']
 
@@ -65,7 +65,7 @@ C, N = np.meshgrid(levels, nbs)
 # zetas = [0.99, 1]
 Gopts = np.zeros(np.shape(C))
 Topts = np.zeros(np.shape(C))
-zeta = 0.99
+zeta = 0.995
 for i, nbm in enumerate(nbs):
     scale = 1/(nbm + 1)
     corrmax = 2 * scale
@@ -93,9 +93,12 @@ for i, nbm in enumerate(nbs):
     opts = optimal(zeta, levels)
     Gopts[i, :] = opts[0]
     Topts[i, :] = opts[1]
+    print(f"nb={nbm} done")
 
-np.save(f"goptszeta{zeta}smallnb.txt", Gopts)
-np.save(f"toptszeta{zeta}smallnb.txt", Topts)
+np.save(f"goptszeta{zeta}", Gopts)
+np.save(f"toptszeta{zeta}", Topts)
+np.save(f"goptszeta{zeta}NBS", N)
+np.save(f"goptszeta{zeta}LEV", C)
 
 GCF = gax.contourf(C, N, Gopts, cmap='viridis', origin="lower")
 TCF = tax.contourf(C, N, Topts, cmap='viridis', origin="lower")
@@ -135,5 +138,5 @@ tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
 
 plt.tight_layout()
 # plt.show()
-gfig.savefig(f"SmallnboptimalPumpVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200)
-tfig.savefig(f"SmallnboptimalTimeVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+gfig.savefig(f"optimalPumpVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200)
+tfig.savefig(f"optimalTimeVaryBathZeta{zeta}.pdf", format='pdf', dpi=1200, bbox_inches='tight')

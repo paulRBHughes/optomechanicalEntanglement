@@ -19,11 +19,11 @@ Paul RB Hughes
 """
 
 # nbc = 0
-nbm = 1
+nbm = 250
 scale = 1/(nbm + 1)
 target = 1e-11
 # tf = 0.08
-gees = np.logspace(-1.5, 1.8, 100)
+gees = np.logspace(-1.5, 2.4, 100)
 # tfs = np.flip(np.logspace(-.8, 2, 100))
 tf = 100
 corrmax = 2*scale
@@ -50,8 +50,8 @@ def timeunder(z, corrlevel, optimal=True):
     return tau
 
 
-cls = [0.8]  # I want to see how long the pump can keep the correlation variance under this value for
-zetas = [1]
+cls = [0.1]  # I want to see how long the pump can keep the correlation variance under this value for
+zetas = [0.99]
 fig, ax = plt.subplots()
 styts = ["-", '--', '-.', ':']
 colors = ['navy', 'dodgerblue', 'lightskyblue']
@@ -60,7 +60,7 @@ for j, cl in enumerate(cls):
         ax.semilogx(gees, timeunder(zeta, cl, False), linewidth=2, label=zeta, linestyle=styts[i], color=colors[j])
 
 ax.set_xlabel(r"$g$")
-ax.set_ylabel(r"$\tilde{\tau}(0.8)$")
+ax.set_ylabel(rf"$\tilde\tau({cls[0]})$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
 ax.set_xlim([0.2, ax.get_xlim()[1]])

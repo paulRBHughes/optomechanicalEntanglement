@@ -143,8 +143,19 @@ def rel_simulation(zeta, g, avb, db, initial, corrmax, target, tf):
     state = np.zeros([3, 100000000])
     state[:, 0] = initial[:]
     i = 0
+    startsbelow = (2*state[0, 0] + 1)*np.exp(-2*state[2, 0]) < corrmax
     # adding a check in here for corr var < 2
-    while (t[i] < tf) and (2*state[0, i] + 1)*np.exp(-2*state[2, i]) < corrmax:  # standard dynamic timestep trick
+    while t[i] < tf:  # standard dynamic timestep trick
+        # now I want to check if the CV is above my set threshold. If it started above it though, we need to be okay with that
+        isabove = (2*state[0, i] + 1)*np.exp(-2*state[2, i]) > corrmax
+        if startsbelow:
+            if isabove:
+                break
+        else:
+            if not isabove:
+                startsbelow = True
+
+
         test = 30 * dt * target
         # two steps of dt
         k = rel_rk4slope(zeta, g, avb, db, state[:, i], dt)
@@ -165,6 +176,7 @@ def rel_simulation(zeta, g, avb, db, initial, corrmax, target, tf):
             state[:, i + 1] = check1a
             i += 1
         dt = dt * rho**0.25
+
 
     t = t[:i-1]
     state = state[:, :i - 1]
