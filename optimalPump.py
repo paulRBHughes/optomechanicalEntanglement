@@ -22,10 +22,10 @@ Paul RB Hughes
 """
 
 # nbc = 0
-nbm = 75
-# nbs = np.arange(0.1, 250.6, 5)
-scale = 1/(nbm + 1)
-corrmax = 2 * scale
+# nbm = 75
+nbs = np.arange(0.1, 250.6, 5)
+# scale = 1/(nbm + 1)
+# corrmax = 2 * scale
 target = 1e-12
 # tf = 0.08
 gees = np.logspace(-1.5, 2.1, 10000)
@@ -62,47 +62,48 @@ gfig, gax = plt.subplots()
 #                    bbox_transform=gax.transAxes, loc="lower left")
 tfig, tax = plt.subplots()
 levels = np.flip(np.logspace(-1, -0.01, 10000))
-zetas = np.arange(0.99, 1, 0.001)
-C, Z = np.meshgrid(levels, zetas)
+zetas = np.arange(0.99, 1, 0.002)
+C, N = np.meshgrid(levels, nbs)
 Gopts = np.zeros(np.shape(C))
 Topts = np.zeros(np.shape(C))
 # zeta = 0.995
-for i, zeta in enumerate(zetas):
-    # scale = 1/(nbm + 1)
-    # corrmax = 2 * scale
+for zeta in zetas:
+    for i, nbm in enumerate(nbs):
+        scale = 1/(nbm + 1)
+        corrmax = 2 * scale
 
 
-    def timeunder(k):
-        g = gees[k]
-        # tf = tfs[k]  # there is a tf we have previously determined that captures the end of entanglement and not much longer
-        ic = np.array([-0.5 * zeta * scale * nbm, -scale * nbm, 0])  # we set the IC according to the tilde eqns
-        t, state = utils.rel_simulation(zeta, g, 0, 0, ic, corrmax, target, tf)  # and simulate the squeeze
-        corr = utils.rel_corr_var(state)  # get the correlation variance
-        mc = np.min(corr)  # find its minimum
-        taus = np.zeros(np.size(levels))
-        # now I want to find time it is entangled below the targets i've set
-        for j, cl in enumerate(levels):  # so for each target level
-            if mc > (scale * cl):  # if the minimum correlation doesn't break the target
-                break  # end the loop and use a stronger g
-            entangledindex = np.nonzero(corr < scale * cl)  # if it does then find the indexes where the correlation does
-            tau = t[entangledindex[0][-1]] - t[entangledindex[0][0]]  # so we can see how long it stays under
-            taus[j] = tau
-        print(f'g={g} done...')
-        return taus
+        def timeunder(k):
+            g = gees[k]
+            # tf = tfs[k]  # there is a tf we have previously determined that captures the end of entanglement and not much longer
+            ic = np.array([-0.5 * zeta * scale * nbm, -scale * nbm, 0])  # we set the IC according to the tilde eqns
+            t, state = utils.rel_simulation(zeta, g, 0, 0, ic, corrmax, target, tf)  # and simulate the squeeze
+            corr = utils.rel_corr_var(state)  # get the correlation variance
+            mc = np.min(corr)  # find its minimum
+            taus = np.zeros(np.size(levels))
+            # now I want to find time it is entangled below the targets I've set
+            for j, cl in enumerate(levels):  # so for each target level
+                if mc > (scale * cl):  # if the minimum correlation doesn't break the target
+                    break  # end the loop and use a stronger g
+                entangledindex = np.nonzero(corr < scale * cl)  # if it does then find the indexes where the correlation does
+                tau = t[entangledindex[0][-1]] - t[entangledindex[0][0]]  # so we can see how long it stays under
+                taus[j] = tau
+            print(f'g={g} done...')
+            return taus
 
 
-    opts = optimal(zeta, levels)
-    Gopts[i, :] = opts[0]
-    Topts[i, :] = opts[1]
+        opts = optimal(zeta, levels)
+        Gopts[i, :] = opts[0]
+        Topts[i, :] = opts[1]
     print(f"zeta={zeta} done")
 
-np.save(f"Zvargopts", Gopts)
-np.save(f"Zvartopts", Topts)
-np.save(f"ZvargoptsNBS", Z)
-np.save(f"ZvargoptsLEV", C)
+    np.save(f"SMFrames/Gopts{zeta}", Gopts)
+    np.save(f"SMFrames/Topts{zeta}", Topts)
+np.save(f"SMFrames/NBs", N)
+np.save(f"SMFrames/levels", C)
 
-GCF = gax.contourf(C, Z, Gopts, cmap='viridis', origin="lower")
-TCF = tax.contourf(C, Z, Topts, cmap='viridis', origin="lower")
+# GCF = gax.contourf(C, Z, Gopts, cmap='viridis', origin="lower")
+# TCF = tax.contourf(C, Z, Topts, cmap='viridis', origin="lower")
 # gax.loglog(levels, opts[0], linewidth=2, label=zeta, color=colors[i], linestyle='-')
     # gbound = (1 + (1 - zeta)*nbm)*np.reciprocal(levels) - 1  # this is a lower bound
     # gmin = opts[2]
@@ -112,9 +113,9 @@ TCF = tax.contourf(C, Z, Topts, cmap='viridis', origin="lower")
 # tax.loglog(levels, opts[1], linewidth=2, label=zeta, color=colors[i], linestyle='-')
 # np.savetxt(f"optPumps{zeta}", opts)
 
-gax.set_xlabel(r"$\Delta^2_{t}$")
-gax.set_ylabel(r"$\zeta$")
-gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
+# gax.set_xlabel(r"$\Delta^2_{t}$")
+# gax.set_ylabel(r"$\zeta$")
+# gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
 
 
 # gax.set_ylim([3e-2, gax.get_ylim()[1]])
@@ -127,9 +128,9 @@ gfig.colorbar(GCF, ax=gax, label=r"$g_{opt}$")
 #
 # gax.legend(title="$\zeta$",loc="lower left")
 
-tax.set_xlabel(r"$\Delta^2_{t}$")
-tax.set_ylabel(r"$\zeta$")
-tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
+# tax.set_xlabel(r"$\Delta^2_{t}$")
+# tax.set_ylabel(r"$\zeta$")
+# tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
 # tax.legend(title="$\zeta$")
 #
 # gax.tick_params(axis='y', direction='in', top=True, right=True, which='both')
@@ -137,7 +138,7 @@ tfig.colorbar(TCF, ax=tax, label=r"$\tilde\tau_{opt}$")
 # gax.tick_params(axis='x', direction='in', top=True, left=True, which='major')
 # tax.tick_params(axis='x', direction='in', top=True, right=True, which='major')
 
-plt.tight_layout()
+# plt.tight_layout()
 # plt.show()
-gfig.savefig(f"optimalPumpVaryZeta.pdf", format='pdf', dpi=1200)
-tfig.savefig(f"optimalTimeVaryZeta.pdf", format='pdf', dpi=1200, bbox_inches='tight')
+# gfig.savefig(f"optimalPumpVaryZetaCORNER.pdf", format='pdf', dpi=1200)
+# tfig.savefig(f"optimalTimeVaryZetaCORNER.pdf", format='pdf', dpi=1200, bbox_inches='tight')
