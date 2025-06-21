@@ -4,7 +4,6 @@ from matplotlib.lines import lineStyles
 import matplotlib.lines as mlines
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-import coolingutils
 import utils
 from multiprocessing import Pool
 
@@ -23,13 +22,13 @@ Paul RB Hughes
 
 # nbc = 0
 # nbm = 75
-nbs = np.arange(0.1, 250.6, 5)
+nbs = np.arange(0.1, 5.1, 0.1)
 # scale = 1/(nbm + 1)
 # corrmax = 2 * scale
 target = 1e-12
 # tf = 0.08
-gees = np.logspace(-1.5, 2.1, 10000)
-tf = 100
+gees = np.logspace(-2, 1.2, 1000)
+tf = 10000
 # tfs = np.flip(np.logspace(-.8, 2, 1000))
 colors = ['dodgerblue', 'navy']
 
@@ -49,11 +48,11 @@ def optimal(z, corrlevel):
             corrtimes[n] = tausarray[n][j]
         taumax[j] = np.max(corrtimes)
         gopt[j] = gees[np.argmax(corrtimes)]
-        mingindex = np.nonzero(corrtimes)[0][0]
-        minima[j] = gees[mingindex]
+        # mingindex = np.nonzero(corrtimes)[0][0]
+        # minima[j] = gees[mingindex]
         # print(f"finished level {corrlevel[j]}")
 
-    return gopt, taumax, minima
+    return gopt, taumax
 
 
 gfig, gax = plt.subplots()
@@ -61,12 +60,12 @@ gfig, gax = plt.subplots()
 #                    bbox_to_anchor=(.32, .05, .65, .55),
 #                    bbox_transform=gax.transAxes, loc="lower left")
 tfig, tax = plt.subplots()
-levels = np.flip(np.logspace(-1, -0.01, 10000))
-zetas = np.arange(0.99, 1, 0.002)
+levels = np.flip(np.logspace(-0.07, 0, 1000))
+zetas = np.arange(0.8, 1, 0.05)
 C, N = np.meshgrid(levels, nbs)
 Gopts = np.zeros(np.shape(C))
 Topts = np.zeros(np.shape(C))
-# zeta = 0.995
+# zeta = 1
 for zeta in zetas:
     for i, nbm in enumerate(nbs):
         scale = 1/(nbm + 1)
@@ -97,10 +96,10 @@ for zeta in zetas:
         Topts[i, :] = opts[1]
     print(f"zeta={zeta} done")
 
-    np.save(f"SMFrames/Gopts{zeta}", Gopts)
-    np.save(f"SMFrames/Topts{zeta}", Topts)
-np.save(f"SMFrames/NBs", N)
-np.save(f"SMFrames/levels", C)
+    np.save(f"antiCVs/Gopts{zeta}", Gopts)
+    np.save(f"antiCVs/Topts{zeta}", Topts)
+np.save(f"antiCVs/NBs", N)
+np.save(f"antiCVs/levels", C)
 
 # GCF = gax.contourf(C, Z, Gopts, cmap='viridis', origin="lower")
 # TCF = tax.contourf(C, Z, Topts, cmap='viridis', origin="lower")
