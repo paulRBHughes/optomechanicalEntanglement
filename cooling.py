@@ -1,9 +1,11 @@
+"""
+Project: Optomechanical Cooling with the BTS
+Purpose: This script produces the heatmap of Fig. 4 in the manuscript, according the steady-state behaviour of the BTS
+Paul RB Hughes
+Last Modified June 2025
+"""
 import numpy as np
 import matplotlib.pyplot as plt
-
-"""
-Purpose: looks at the steady-state population for each mode in the BTS. Creates fig. 4 in the manuscript
-"""
 
 plt.rcParams.update({
         "text.usetex": True,
@@ -11,6 +13,14 @@ plt.rcParams.update({
         "font.size": "16"
     })
 
+# Control
+savefig = False
+pathway = "optomechanical/heatmap.pdf"
+
+# Set parameters here
+gr_array = np.arange(0, 3.01, 0.01)
+k = np.arange(0, 6, 0.2)  # to make the zetas
+zetas = 1 - 1/(10**k)
 saveplots = False
 path = "plots/heatmap.pdf"
 
@@ -25,8 +35,9 @@ hbaromegaonkopt = 0.2663576  # 1THz
 G, K = np.meshgrid(gr, k)
 G, Z = np.meshgrid(gr, zetas)
 
+# plotting
 fig, ax = plt.subplots()
-theta = 0.5 * np.arctan(-2 * G)
+theta = 0.5 * np.arctan(-2 * G)  # steady-state thetas
 cooled = ((1 - Z) * nbm * np.square(np.cos(theta)) + (1 + Z) * nbc * np.square(np.sin(theta)))/(1 - Z * np.cos(2 * theta))
 opt = ((1 + Z) * nbc * np.square(np.cos(theta)) + (1 - Z) * nbm * np.square(np.sin(theta)))/(1 + Z * np.cos(2 * theta))
 cooltot = cooled * np.square(np.cos(theta)) + opt * np.square(np.sin(theta))  # total population is the observable
