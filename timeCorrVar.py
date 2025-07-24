@@ -12,36 +12,36 @@ plt.rcParams.update({
     })
 
 """
-optimalPump.py
+optimalPumpVaryBath.py
 Purpose: Determine the pump that creates the longest lasting level under a certain correlation variance.
+          creates fig 8 of manuscript
 Date: 23 Sept 2024
+Modified Often
 Paul RB Hughes
 """
 
-# nbc = 0
-nbm = 250
+# nbc = 0  # again, assuming this is very small
+nbm = 75
 scale = 1/(nbm + 1)
-target = 1e-11
-# tf = 0.08
-gees = np.logspace(-1.5, 2.4, 100)
-# tfs = np.flip(np.logspace(-.8, 2, 100))
-tf = 100
-corrmax = 2*scale
-
+target = 1e-12  # simulation precision
+gees = np.logspace(-1, 2, 500)
+tf = 10
+cv_target = 0.8
+corrmax = 2 * (nbm + 1)
 
 
 def timeunder(z, corrlevel, optimal=True):
+
     tau = np.zeros(np.size(gees))
     for i, g in enumerate(gees):
-        # tf = tfs[i]
-        ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # assumes large bath for mech
+        ic = np.array([0, 0, 0])  # assumes large bath for mech
         t, state = utils.rel_simulation(z, g, 0, 0, ic, corrmax, target, tf)
         corr = utils.rel_corr_var(state)
         mc = np.min(corr)
         # now I want to find time it is entangled
-        if mc > (scale * corrlevel):
+        if mc > corrlevel:
             continue
-        entangledindex = np.nonzero(corr < scale * corrlevel)
+        entangledindex = np.nonzero(corr < corrlevel)
         tau[i] = t[entangledindex[0][-1]] - t[entangledindex[0][0]]
     gopt = gees[np.argmax(tau)]
     print(gopt)
@@ -50,8 +50,8 @@ def timeunder(z, corrlevel, optimal=True):
     return tau
 
 
-cls = [0.1]  # I want to see how long the pump can keep the correlation variance under this value for
-zetas = [0.99]
+cls = [0.5]  # I want to see how long the pump can keep the correlation variance under this value for
+zetas = [0.4]
 fig, ax = plt.subplots()
 styts = ["-", '--', '-.', ':']
 colors = ['navy', 'dodgerblue', 'lightskyblue']
@@ -63,7 +63,7 @@ ax.set_xlabel(r"$g$")
 ax.set_ylabel(rf"$\tilde\tau({cls[0]})$")
 ax.legend(title="$\zeta$")
 plt.tight_layout()
-ax.set_xlim([0.2, ax.get_xlim()[1]])
+# ax.set_xlim([0.2, ax.get_xlim()[1]])
 # solid = mlines.Line2D([], [], color=colors[0], linestyle=styts[0], label=zetas[0])
 # dashed = mlines.Line2D([], [], color=colors[0], linestyle=styts[1], label=zetas[1])
 # dashdot = mlines.Line2D([], [], color=colors[2], linestyle=styts[2], label=zetas[2])

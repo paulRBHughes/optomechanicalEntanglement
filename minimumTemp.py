@@ -3,7 +3,10 @@ import matplotlib.pyplot as plt
 import coolingutils
 from multiprocessing import Pool
 
-
+"""
+This code considered a pump that is not strong, looking at how close it got to the strong pump limit. 
+This can be done analytically, so it is not necessary. 
+"""
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
@@ -19,7 +22,7 @@ target = 1e-8
 tf = 5
 # hbaromegaonk = 0.0000959847469  # 2MHz
 # hbaromegaonkopt = 0.2663576  # 1THz
-# G, Z = np.meshgrid(gammas, zetas)
+# G, Z = np.meshgrid(gr_array, zetas)
 tmin = np.zeros([np.size(gammas), np.size(zetas)])
 minn = np.zeros([np.size(gammas), np.size(zetas)])
 
@@ -50,7 +53,7 @@ tmin = np.transpose(tmin)
 np.savetxt("minpop", minn)
 np.savetxt("tmin", tmin)
 
-# G, Z = np.meshgrid(gammas, zetas)
+# G, Z = np.meshgrid(gr_array, zetas)
 # fig, ax = plt.subplots()
 # minT = ax.contourf(G, Z, minn, cmap='copper', origin="lower")
 # ax.set_xlabel("$|g|$")
