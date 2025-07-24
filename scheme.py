@@ -29,7 +29,7 @@ hbaromegaonk = 0.0000959847469  # 2MHz
 hbaromegaonkopt = 0.2663576  # 1THz
 # G, Z = np.meshgrid(gammas, zetas)
 target = 1e-11
-tf = 0.08
+tf = 10
 gees = np.arange(0.5, 5.1, 0.1)
 tfs = np.reciprocal(gees) * 2
 zetas = [0.99, 0.999, 1]
@@ -48,7 +48,7 @@ def largecooled(j):
     for i, g in enumerate(gees):
         tf = tfs[i]
         ic = np.array([-0.5 * z * scale * nbm, -scale * nbm, 0])  # assumes large bath for mech
-        t, state = utils.rel_simulation(z, g, 0, 0, ic, target, tf)
+        t, state = utils.rel_simulation(z, g, 0, 0, ic, 2*scale, target, tf)
         corr = utils.rel_corr_var(state)
         mc = np.min(corr)
         mincorr[i] = mc
