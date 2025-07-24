@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import coolingutils
 
 """
-Purpose: simulate and plot the beamsplitter Hamiltonian, producing Fig. 3 of the manuscript.
+Purpose: simulate and plot the beamsplitter Hamiltonian, producing Fig. 2 of the manuscript.
 """
 
 plt.rcParams.update({
