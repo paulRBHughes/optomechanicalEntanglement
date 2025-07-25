@@ -25,8 +25,8 @@ Paul RB Hughes
 loaddata = False  # runs sims if false
 noProcesses = 16  # how many processes to run in parallel
 savedata = True
-datapath = "pumpOptimizationData/"
-savefigs = True
+datapath = "pumpOptimizationData/paperData/analytic/"
+savefigs = False
 plotpath = "plots/"
 showbound = False  # show the lower bound on the plot
 showmins = False  # show gmin on plot
@@ -36,16 +36,16 @@ gfig, gax = plt.subplots()
 tfig, tax = plt.subplots()
 
 zetas = [1]
-nbm = 75
+nbm = 0
 
 if not loaddata:
     # nbc = 0  # not used, assuming cavity mode is much higher freq than mechanical
     scale = 1/(nbm + 1)  # for implementing the bath independent equations (allows for larger pump strengths
     corrmax = scale  # sim will stop when the (scaled) CV gets above this
     target = 1e-11
-    tf = 100  # not really needed since corrmax will end it before the time cutoff
-    gees = np.logspace(-1.5, 2.5, 10000)
-    levels = np.flip(np.logspace(-2, -0.003, 10000))  # flipped so they go into function correctly
+    tf = 30  # not really needed since corrmax will end it before the time cutoff
+    gees = np.logspace(-1.5, 2.9, 50000)
+    levels = np.flip(np.logspace(-2.4, -0.003, 10000))  # flipped so they go into function correctly
 
 
     def optimal():

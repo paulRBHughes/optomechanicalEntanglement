@@ -18,11 +18,11 @@ Modified to include nbm variations June 2025
 Paul RB Hughes
 """
 
-nbs = np.arange(0.5, 250, 5)
+nbs = np.arange(5, 250, 5)
 target = 1e-11
-gees = np.logspace(-2, 2.2, 100)  # my setup can handle up to g=10^2.9, but not a hard limit
-tf = 1000  # not too relevant with corrmax
-levels = np.flip(np.logspace(-1, -0.003, 1000))  # target correlation levels to consider
+gees = np.logspace(-2, 2.9, 1000)  # my setup can handle up to g=10^2.9, but not a hard limit
+tf = 100  # not too relevant with corrmax
+levels = np.flip(np.logspace(-1, -0.03, 1000))  # target correlation levels to consider
 zetas = np.arange(0.99, 1, 0.002)
 path = "pumpOptimizationData/tester/"
 
@@ -63,9 +63,9 @@ for zeta in zetas:
             taus = np.zeros(np.size(levels))
             # now I want to find time it is entangled below the targets I've set
             for j, cl in enumerate(levels):  # so for each target level
-                if mc > (cl):  # if the minimum correlation doesn't break the target
+                if mc > (cl * scale):  # if the minimum correlation doesn't break the target
                     break  # end the loop and use a stronger g
-                entangledindex = np.nonzero(corr < cl)  # if it does then find the indexes where the correlation does
+                entangledindex = np.nonzero(corr < cl * scale)  # if it does then find the indexes where the correlation does
                 tau = t[entangledindex[0][-1]] - t[entangledindex[0][0]]  # so we can see how long it stays under
                 taus[j] = tau
             # print(f'g={g} done...')
@@ -75,8 +75,9 @@ for zeta in zetas:
         opts = optimal()
         Gopts[i, :] = opts[0]
         Topts[i, :] = opts[1]
-    np.save(path+f"Gopts{zeta}", opts[0])
-    np.save(path+f"Topts{zeta}", opts[1])
+        print(f"nb = {nbm} done")
+    np.save(path+f"Gopts{zeta}", Gopts)
+    np.save(path+f"Topts{zeta}", Topts)
     print(f"zeta={zeta} done")
 
 np.save(path+f"NBs", N)
