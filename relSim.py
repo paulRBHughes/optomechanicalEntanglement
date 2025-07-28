@@ -25,7 +25,7 @@ fig, ax = plt.subplots()
 for zeta in zets:
     ic = np.array([-0.5 * zeta * 75/(76), -75/76, 0])
     for i, g0 in enumerate(g0s):
-        t, state = utils.rel_simulation(zeta, g0, av_bath, diff_bath, ic, target, tfs[i])
+        t, state = utils.rel_simulation(zeta, g0, av_bath, diff_bath, ic, 1/76, target, tfs[i])
         corr = utils.rel_corr_var(state) * 76
         ax.loglog(t[1:], corr[1:], linewidth=2, label=zeta, linestyle='-', color='dodgerblue')
         # now I want to turn the pump off when I've minimized the correlation variance
@@ -33,7 +33,7 @@ for zeta in zets:
         for offest in offsets:
             off_state = state[:, mindex + offest]
             t1 = t[mindex + offest]
-            t2, state2 = utils.rel_simulation(zeta, 0, av_bath, diff_bath, off_state, target, 400)
+            t2, state2 = utils.rel_simulation(zeta, 0, av_bath, diff_bath, off_state, 1/76, target, 400)
             corr2 = utils.rel_corr_var(state2) * 76
             # t0 = t[:mindex]
             t2_scale = t1*np.ones(np.size(t2)) + t2

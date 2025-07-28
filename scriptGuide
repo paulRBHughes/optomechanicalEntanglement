@@ -13,3 +13,21 @@ Figs 9&10: optimalPump.py
 Data for Figs 11&12: optimalPumpVaryBath.py
 Figs 11&12: optimalPlotting.py
 
+OTHER RELEVANT FILES
+coolingutils.py: Contains the functions that execute the RK4 for the BTS
+utils.py: Contains the functions that execute the RK4 for the 2MSTS
+optGSolver.py: uses the analytic expression to determine the optimal g value
+anticorrelations.py: looks at the correlation maxima briefly discussed in Sec V
+optimalPumpMovie.py: makes an animation from fig 12 like data for different zeta values
+
+
+OTHER FILES NOT ABOVE
+ghostfromSS.py, ghostfromSSanimations.py, ghostSNR.py: abandoned ghost imaging simulations based on 2MSTS
+minimumTemp.py: numerical simulation of cooling that is just determined analytically in Sec III
+2MSTSsim.py: simulates a 2MSTS initially in a thermal state
+slopes.py: Deprecated. Simulated the bathless equations for a wide zeta at a particular population, without changing IC
+plottingSlopes,py: Deprecated. Plotted data from above
+pumpComp.py: Compares different pump envelopes for the entanglement process
+relSim.py: Broken. Early testing of the effect of starting the 2MSTS process below equilibrium
+
+
