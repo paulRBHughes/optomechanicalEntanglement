@@ -24,19 +24,19 @@ Paul RB Hughes
 
 loaddata = False  # runs sims if false
 noProcesses = 16  # how many processes to run in parallel
-savedata = True
-datapath = "pumpOptimizationData/paperData/analytic/"
+savedata = False
+datapath = ""
 savefigs = False
 plotpath = "plots/"
-showbound = False  # show the lower bound on the plot
-showmins = False  # show gmin on plot
+showbound = True  # show the lower bound on the plot
+showmins = True  # show gmin on plot
 
 colors = ['navy', 'dodgerblue']  # for plotting, one for each zeta
 gfig, gax = plt.subplots()
 tfig, tax = plt.subplots()
 
-zetas = [1]
-nbm = 0
+zetas = [0.99, 1]
+nbm = 75
 
 if not loaddata:
     # nbc = 0  # not used, assuming cavity mode is much higher freq than mechanical
@@ -45,7 +45,7 @@ if not loaddata:
     target = 1e-11
     tf = 30  # not really needed since corrmax will end it before the time cutoff
     gees = np.logspace(-1.5, 2.9, 50000)
-    levels = np.flip(np.logspace(-2.4, -0.003, 10000))  # flipped so they go into function correctly
+    levels = np.flip(np.logspace(-1, -0.003, 10000))  # flipped so they go into function correctly
 
 
     def optimal():

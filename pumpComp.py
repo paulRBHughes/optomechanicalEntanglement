@@ -5,7 +5,7 @@ import utils
 
 
 """
-scheme.py
+varianceMinima.py
 Purpose: to determine the correlation variance minimum and time below 1 for multiple cooling SS
         Here I will vary the relative loss rates for our defined pump strengths and populations
 Date: 3 Sept 2024

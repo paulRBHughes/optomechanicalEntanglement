@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a58ddf6-1402-4390-9070-4d22204ffcd1" name="Changes" comment="includes the missed sin term in theta" />
+    <list default="true" id="3a58ddf6-1402-4390-9070-4d22204ffcd1" name="Changes" comment="zeta entanglement file I need">
+      <change beforePath="$PROJECT_DIR$/.idea/TwoModeSqueezing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TwoModeSqueezing.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/coolingHeatmap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entanglementbyZeta.py" beforeDir="false" afterPath="$PROJECT_DIR$/entanglementbyZeta.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/population.py" beforeDir="false" afterPath="$PROJECT_DIR$/cooledPopulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pumpComp.py" beforeDir="false" afterPath="$PROJECT_DIR$/pumpComp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scheme.py" beforeDir="false" afterPath="$PROJECT_DIR$/varianceMinima.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/beamsplitterHamSimulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/timeCorrVar.py" beforeDir="false" afterPath="$PROJECT_DIR$/timeCorrVar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transient.py" beforeDir="false" afterPath="$PROJECT_DIR$/transientEntanglement.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +29,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="nbvary" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -26,12 +42,15 @@
     &quot;assignee&quot;: &quot;paulRBHughes&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/paulRBHughes/2modeSqueeze.git",
-    "accountId": "c2d535ce-7bdf-4d75-aeaf-494771784572"
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="8fa9bc29-28d2-4cdd-83f2-a7dd4a420f2a" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/paulRBHughes/2modeSqueeze.git&quot;,
+    &quot;accountId&quot;: &quot;c2d535ce-7bdf-4d75-aeaf-494771784572&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -41,23 +60,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.naiveSim.executor&quot;: &quot;Run&quot;,
-    &quot;Python.relSim.executor&quot;: &quot;Run&quot;,
-    &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/paul/PycharmProjects/2modeSqueeze&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.naiveSim.executor": "Run",
+    "Python.relSim.executor": "Run",
+    "Python.simulation.executor": "Run",
+    "Python.utils.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/paul/PycharmProjects/2modeSqueeze",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -104,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1724272810807</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="zeta entanglement file I need">
+      <created>1752718817664</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1752718817664</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,7 +151,8 @@
     <MESSAGE value="intial commit" />
     <MESSAGE value="fixed the discrepancy" />
     <MESSAGE value="includes the missed sin term in theta" />
-    <option name="LAST_COMMIT_MESSAGE" value="includes the missed sin term in theta" />
+    <MESSAGE value="zeta entanglement file I need" />
+    <option name="LAST_COMMIT_MESSAGE" value="zeta entanglement file I need" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/2modeSqueeze$utils.coverage" NAME="utils Coverage Results" MODIFIED="1719758652613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

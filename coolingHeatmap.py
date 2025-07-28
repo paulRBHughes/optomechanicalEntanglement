@@ -15,7 +15,7 @@ plt.rcParams.update({
 
 # Control
 savefig = False
-pathway = "optomechanical/heatmap.pdf"
+path = "optomechanical/heatmap.pdf"
 
 # Set parameters here
 gr_array = np.arange(0, 3.01, 0.01)

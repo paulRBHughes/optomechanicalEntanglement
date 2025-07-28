@@ -1,0 +1,15 @@
+Purpose: to list the scripts used to generate the figures and data in the manuscript
+
+FILES BY FIGURE NUMBER
+Fig 1: detunedCooling.py
+Fig 2: beamsplitterHamSimulation.py
+Fig 3: cooledPopulation.py
+Fig 4: coolingHeatmap.py
+Fig 5: transientEntanglement.py
+Fig 6: varianceMinima.py
+Fig 7: entanglementbyZeta.py
+Fig 8: timeCorrVar.py (Can also use this to determine an optimal pump for a single nbm, zeta, and cv level)
+Figs 9&10: optimalPump.py
+Data for Figs 11&12: optimalPumpVaryBath.py
+Figs 11&12: optimalPlotting.py
+
