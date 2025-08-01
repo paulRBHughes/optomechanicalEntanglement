@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from multiprocessing import Pool
 
 """
 'optGSolver'
@@ -21,16 +21,23 @@ zetas = [0.99, 0.992, 0.994, 0.996, 0.998]
 for zeta in zetas:
     coeff = 3.4371619800745017 * (1 - zeta)**1.0025867074600905
     for i, nb in enumerate(N[:, 0]):
-        for j, level in enumerate(C[0, :]):
+
+
+        def gfinderlevel(level):
 
 
             def function(k):  # k indexes the intercepts
-                return coeff * nb / gints[k] + intercepts[k] - level
+                return coeff * nb / (gints[k] + 1) + intercepts[k] - level
 
 
             placeholder = np.abs([function(k) for k in range(np.size(gints))])
             optindex = np.argmin(placeholder)
-            Gany[i, j] = gints[optindex]
-            # print(f"level {level} done")
+            return gints[optindex]
+
+
+        with Pool(processes=15) as pool:
+            temp = pool.map(gfinderlevel, C[0, :])
+        Gany[i, :] = temp
         print(f"nb {nb} done")
     np.save(path + f"Gopts{zeta}", Gany)
+    print(f"zeta = {zeta} done")

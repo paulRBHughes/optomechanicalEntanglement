@@ -19,8 +19,8 @@ utils.py: Contains the functions that execute the RK4 for the 2MSTS
 anticorrelations.py: looks at the correlation maxima briefly discussed in Sec V
 optimalPumpMovie.py: makes an animation from fig 12 like data for different zeta values
 betterSlopes.py: extracts slope parameters from Fig 12 data
-timeComparison.py: generates the taus for the gees generated above
 optGSolver.py: uses the analytic expression to determine the optimal g value
+timeComparison.py: generates the taus for the gees generated above
 
 
 OTHER FILES NOT ABOVE

@@ -2,9 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-import utils
-from multiprocessing import Pool
-
 plt.rcParams.update({
         "text.usetex": True,
         "font.family": "Computer Modern Roman",
@@ -58,9 +55,9 @@ for i, zeta in enumerate(zetas):
         gees = np.load(path+f"gees{zeta}.npy")
         slopes = np.load(path + f"slopes{zeta}.npy")
         ints = np.load(path + f"ints{zeta}.npy")
-    ax.scatter(gees, slopes, label=zeta, c=colors[i], s=2)
-    axi.scatter(gees, -ints/slopes, label=zeta, c=colors[i], s=2)  # contorted to give beta(gopt) which appears independent of zeta
-    regre = linregress(gees, slopes)  # as it happens, this is basically linear with slopes determined by zeta
+    ax.scatter(gees + 1, slopes, label=zeta, c=colors[i], s=2)
+    axi.scatter(gees + 1, -ints/slopes, label=zeta, c=colors[i], s=2)  # contorted to give beta(gopt) which appears independent of zeta
+    regre = linregress(gees + 1, slopes)  # as it happens, this is basically linear with slopes determined by zeta
     slopeOfSlopes[i] = regre.slope
 
 regagain = linregress(np.log(1-zetas), np.log(slopeOfSlopes))  # loglog regression
@@ -69,11 +66,11 @@ print(k)  # this is the power of zeta (negative in eqn)
 print(np.exp(-regagain.intercept))  # this will give the rest of the slope
 
 ax.set_ylim(0, 10000)
-ax.set_xlabel("$g_{opt}$")
+ax.set_xlabel("$g_{opt} + 1$")
 ax.set_ylabel("slope")
 ax.legend(title=r"$\zeta$", loc="upper left", markerscale=4)
 
-axi.set_xlabel("$g_{opt}$")
+axi.set_xlabel("$g_{opt} + 1$")
 axi.set_ylabel("intercept")
 
 axz.scatter(1 - zetas, slopeOfSlopes, c=colors[-1])
